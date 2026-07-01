@@ -14,191 +14,166 @@
 
 <style>
   :root {
-    --leaf: #6BB572;
-    --leaf-soft: rgba(107,181,114,.14);
-    --deep: #28543A;
-    --accent: #F29E61;
-    --card: rgba(255,255,255,.88);
-    --fish: #5B9BD5;
-    --chicken: #E8A838;
-    --beef: #D4605A;
+    --leaf: #6BB572; --leaf-soft: rgba(107,181,114,.14); --deep: #28543A;
+    --accent: #F29E61; --card: rgba(255,255,255,.88);
+    --fish: #5B9BD5; --chicken: #E8A838; --beef: #D4605A;
     --radius: 18px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body { margin: 0; height: 100%; }
+  html, body { margin:0; height:100%; }
   body {
-    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    font-family: -apple-system,"PingFang SC","Helvetica Neue",sans-serif;
     color: var(--deep);
-    background: linear-gradient(to bottom, #F5FAF0 0%, #C9E6CC 100%);
+    background: linear-gradient(to bottom,#F5FAF0 0%,#C9E6CC 100%);
     background-attachment: fixed;
-    -webkit-user-select: none; user-select: none;
-    overflow-x: hidden;
+    -webkit-user-select:none; user-select:none; overflow-x:hidden;
   }
-
-  /* === 背景叶子 === */
-  .bg-leaf {
-    position: fixed; z-index: 0; pointer-events: none;
-    width: 260px; opacity: .08;
-  }
-  .bg-leaf.a { top: -60px; right: -50px; transform: rotate(-20deg); }
-  .bg-leaf.b { bottom: 40px; left: -70px; transform: rotate(150deg); opacity: .10; }
-
-  /* === 主区域 === */
+  .bg-leaf { position:fixed; z-index:0; pointer-events:none; width:260px; opacity:.08; }
+  .bg-leaf.a { top:-60px; right:-50px; transform:rotate(-20deg); }
+  .bg-leaf.b { bottom:40px; left:-70px; transform:rotate(150deg); opacity:.10; }
   #screen {
-    position: relative; z-index: 1;
-    max-width: 580px; margin: 0 auto;
-    padding: calc(env(safe-area-inset-top) + 14px) 16px 60px;
-    min-height: 100%;
+    position:relative; z-index:1; max-width:580px; margin:0 auto;
+    padding: calc(env(safe-area-inset-top) + 14px) 16px 60px; min-height:100%;
+  }
+  h1 { font-size:28px; font-weight:800; margin:6px 0 2px; }
+  .subtitle { font-size:17px; color:rgba(40,84,58,.6); margin-bottom:18px; }
+  h2 { font-size:17px; margin:0 0 8px; }
+
+  /* === day header === */
+  .day-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  .day-label { font-size:15px; font-weight:700; color:#fff; padding:4px 14px; border-radius:20px; }
+  .day-label.fish { background:var(--fish); }
+  .day-label.chicken { background:var(--chicken); }
+  .day-label.beef { background:var(--beef); }
+  .edit-btn {
+    margin-left:auto; width:34px; height:34px; border-radius:50%;
+    border:none; background:rgba(255,255,255,.85); cursor:pointer;
+    font-size:16px; display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  }
+  .back-btn {
+    display:flex; align-items:center; gap:4px; border:none; background:none;
+    font-size:16px; font-weight:600; color:var(--leaf); cursor:pointer;
+    padding:0; margin-bottom:14px; font-family:inherit;
   }
 
-  /* === 顶部 === */
-  h1 { font-size: 28px; font-weight: 800; margin: 6px 0 2px; }
-  .subtitle { font-size: 17px; color: rgba(40,84,58,.6); margin-bottom: 18px; }
-
-  /* === Tab === */
-  .segmented {
-    display: flex; background: white; border-radius: 14px;
-    padding: 3px; margin-bottom: 18px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.05);
-  }
-  .segmented button {
-    flex: 1; border: none; background: none; padding: 10px 0;
-    font-size: 15px; font-weight: 700; color: rgba(40,84,58,.45);
-    border-radius: 11px; cursor: pointer;
-    font-family: inherit;
-  }
-  .segmented button.active {
-    background: var(--leaf); color: #fff;
-  }
-
-  /* === 日期标题条 === */
-  .day-header {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 12px;
-  }
-  .day-label {
-    font-size: 15px; font-weight: 700; color: #fff;
-    padding: 4px 14px; border-radius: 20px;
-  }
-  .day-label.fish { background: var(--fish); }
-  .day-label.chicken { background: var(--chicken); }
-  .day-label.beef { background: var(--beef); }
-  .tag {
-    font-size: 12px; font-weight: 600; color: rgba(40,84,58,.6);
-    padding: 3px 10px; background: rgba(255,255,255,.7);
-    border-radius: 20px;
-  }
-
-  /* === 菜卡片 === */
+  /* === dish card === */
   .dish-card {
-    background: var(--card); border-radius: var(--radius);
-    padding: 16px 18px; margin-bottom: 10px;
+    background:var(--card); border-radius:var(--radius);
+    padding:16px 18px; margin-bottom:10px;
     box-shadow: 0 3px 12px rgba(107,181,114,.10);
   }
-  .dish-card .title-row {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 8px;
-  }
-  .dish-card .emoji { font-size: 22px; }
-  .dish-card .dish-name { font-size: 17px; font-weight: 700; }
-  .dish-card .ingredients {
-    font-size: 14px; color: rgba(40,84,58,.65);
-    line-height: 1.6;
-  }
+  .dish-card .title-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .dish-card .emoji { font-size:22px; }
+  .dish-card .dish-name { font-size:17px; font-weight:700; }
+  .dish-card .ingredients { font-size:14px; color:rgba(40,84,58,.65); line-height:1.6; }
   .dish-card .how {
-    font-size: 13px; color: rgba(40,84,58,.5);
-    margin-top: 6px; padding-top: 6px;
-    border-top: 1px dashed rgba(107,181,114,.25);
-    line-height: 1.5;
+    font-size:13px; color:rgba(40,84,58,.5); margin-top:6px; padding-top:6px;
+    border-top:1px dashed rgba(107,181,114,.25); line-height:1.5;
   }
-  .dish-card .how::before { content: "👨‍🍳 "; font-size: 12px; }
+  .dish-card .how::before { content:"👨‍🍳 "; font-size:12px; }
 
-  /* === 营养栏 === */
-  .nutrition-bar {
-    display: flex; gap: 8px; margin-top: 10px;
+  /* === edit fields === */
+  .edit-card {
+    background:var(--card); border-radius:var(--radius);
+    padding:14px; margin-bottom:10px;
+    box-shadow: 0 3px 12px rgba(107,181,114,.10);
   }
-  .nut {
-    flex: 1; text-align: center;
-    background: rgba(107,181,114,.08); border-radius: 10px;
-    padding: 8px 4px;
+  .edit-card .row { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+  .edit-card .row:last-child { margin-bottom:0; }
+  .edit-card input, .edit-card textarea {
+    width:100%; border:1px solid rgba(107,181,114,.3); border-radius:10px;
+    padding:8px 10px; font-size:14px; font-family:inherit;
+    color:var(--deep); background:#fff;
+    -webkit-user-select:text; user-select:text;
   }
-  .nut .val { font-size: 18px; font-weight: 800; color: var(--deep); }
-  .nut .label { font-size: 11px; color: rgba(40,84,58,.55); margin-top: 1px; }
+  .edit-card .e-emoji { width:44px; text-align:center; font-size:20px; padding:4px; }
+  .edit-card .e-name { font-weight:700; font-size:15px; }
+  .edit-card textarea { resize:vertical; min-height:32px; }
+  .edit-card .del-dish {
+    flex:0 0 auto; width:30px; height:30px; border-radius:50%;
+    border:none; background:rgba(242,158,97,.15); color:var(--accent);
+    font-size:16px; cursor:pointer;
+  }
+  .edit-card .drag-handle { color:rgba(40,84,58,.3); cursor:grab; font-size:18px; }
+  .add-btn-row {
+    display:flex; gap:6px; margin-bottom:18px;
+  }
+  .btn {
+    border:none; border-radius:12px; padding:10px 20px;
+    font-size:14px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  .btn.primary { background:var(--leaf); color:#fff; }
+  .btn.outline { background:transparent; color:var(--leaf); border:2px solid var(--leaf); }
+  .btn.danger { background:rgba(212,96,90,.12); color:var(--beef); }
+  .btn.small { padding:6px 14px; font-size:13px; }
+  .btn-icon {
+    width:36px; height:36px; border-radius:50%; border:none;
+    font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .btn-icon.green { background:var(--leaf); color:#fff; }
+  .btn-icon:disabled { opacity:.4; }
 
-  /* === 达标状态 === */
-  .status {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 14px; font-weight: 700; margin-top: 8px;
-  }
-  .status.pass { color: #6BB572; }
-  .status.warn { color: #E8A838; }
+  /* === nutrition bar === */
+  .nutrition-bar { display:flex; gap:8px; margin-top:10px; }
+  .nut { flex:1; text-align:center; background:rgba(107,181,114,.08); border-radius:10px; padding:8px 4px; }
+  .nut .val { font-size:18px; font-weight:800; color:var(--deep); }
+  .nut .label { font-size:11px; color:rgba(40,84,58,.55); margin-top:1px; }
+  .nut-row { display:flex; gap:6px; }
+  .nut-row .nut input { width:100%; text-align:center; border:none; background:transparent; font-size:16px; font-weight:800; color:var(--deep); padding:4px; }
+  .nut-row .nut { padding:6px 4px; }
 
-  /* === 汇总表 === */
-  .summary-table {
-    width: 100%; border-collapse: collapse;
-    background: var(--card); border-radius: var(--radius);
-    overflow: hidden; box-shadow: 0 3px 12px rgba(107,181,114,.10);
-  }
-  .summary-table th {
-    background: var(--leaf); color: #fff;
-    padding: 10px 6px; font-size: 12px; font-weight: 700;
-  }
-  .summary-table td {
-    padding: 10px 6px; text-align: center;
-    font-size: 13px; font-weight: 600;
-    border-bottom: 1px solid rgba(107,181,114,.12);
-  }
-  .summary-table td.day { text-align: left; padding-left: 12px; font-weight: 700; }
-  .summary-table .pass { color: #6BB572; font-weight: 800; }
-  .summary-table .warn { color: #E8A838; font-weight: 800; }
-  .summary-table .meat { font-size: 14px; }
+  /* === status === */
+  .status { display:inline-flex; align-items:center; gap:4px; font-size:14px; font-weight:700; margin-top:8px; }
+  .status.pass { color:#6BB572; }
+  .status.warn { color:#E8A838; }
+  .modified { font-size:11px; color:var(--accent); font-weight:600; }
 
-  /* === 采购清单 === */
-  .shop-list {
-    list-style: none; padding: 0; margin: 0;
-  }
-  .shop-list li {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 14px; margin-bottom: 6px;
-    background: var(--card); border-radius: 12px;
-    font-size: 15px; font-weight: 600;
-    box-shadow: 0 2px 8px rgba(107,181,114,.08);
-  }
-  .shop-list .qty { margin-left: auto; color: var(--accent); font-weight: 800; font-size: 14px; }
+  /* === summary table === */
+  .summary-table { width:100%; border-collapse:collapse; background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:0 3px 12px rgba(107,181,114,.10); }
+  .summary-table th { background:var(--leaf); color:#fff; padding:10px 6px; font-size:12px; font-weight:700; }
+  .summary-table td { padding:10px 6px; text-align:center; font-size:13px; font-weight:600; border-bottom:1px solid rgba(107,181,114,.12); }
+  .summary-table td.day { text-align:left; padding-left:12px; font-weight:700; }
+  .summary-table .pass { color:#6BB572; font-weight:800; }
+  .summary-table .warn { color:#E8A838; font-weight:800; }
+  .summary-table .meat { font-size:14px; }
 
-  /* === 注意事项 === */
-  .note {
-    background: rgba(242,158,97,.12); border-left: 3px solid var(--accent);
-    border-radius: 0 12px 12px 0; padding: 12px 14px;
-    margin-bottom: 8px; font-size: 14px; line-height: 1.6;
-    color: rgba(40,84,58,.85);
-  }
-  .note::before { content: "⚠️ "; }
+  /* === shop === */
+  .shop-list { list-style:none; padding:0; margin:0; }
+  .shop-list li { display:flex; align-items:center; gap:8px; padding:10px 14px; margin-bottom:6px; background:var(--card); border-radius:12px; font-size:15px; font-weight:600; box-shadow:0 2px 8px rgba(107,181,114,.08); }
+  .shop-list .qty { margin-left:auto; color:var(--accent); font-weight:800; font-size:14px; }
 
-  /* === 底部导航 === */
+  /* === note === */
+  .note { background:rgba(242,158,97,.12); border-left:3px solid var(--accent); border-radius:0 12px 12px 0; padding:12px 14px; margin-bottom:8px; font-size:14px; line-height:1.6; color:rgba(40,84,58,.85); }
+  .note::before { content:"⚠️ "; }
+
+  /* === tabbar === */
   #tabbar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 2;
-    display: flex; justify-content: center; gap: 0;
-    padding: 6px 0 calc(env(safe-area-inset-bottom) + 6px);
-    background: rgba(245,250,240,.92);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border-top: 1px solid rgba(107,181,114,.16);
+    position:fixed; left:0; right:0; bottom:0; z-index:2;
+    display:flex; justify-content:center; gap:0;
+    padding:6px 0 calc(env(safe-area-inset-bottom) + 6px);
+    background:rgba(245,250,240,.92);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid rgba(107,181,114,.16);
   }
-  .tab {
-    flex: 1; max-width: 150px; background: none; border: none; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
-    color: rgba(40,84,58,.4); font-size: 11px; font-weight: 700; padding: 4px;
-  }
-  .tab svg { width: 24px; height: 24px; }
-  .tab.active { color: var(--leaf); }
+  .tab { flex:1; max-width:150px; background:none; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; color:rgba(40,84,58,.4); font-size:11px; font-weight:700; padding:4px; }
+  .tab svg { width:24px; height:24px; }
+  .tab.active { color:var(--leaf); }
+  .page { padding-bottom:70px; }
 
-  /* === 常驻数据页 padding === */
-  .page { padding-bottom: 70px; }
+  .meta-label { font-size:12px; font-weight:700; color:rgba(40,84,58,.45); margin:16px 0 6px; text-transform:uppercase; letter-spacing:.5px; }
+  .section-row { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .section-row label { font-size:14px; font-weight:600; min-width:50px; }
+  .section-row input, .section-row select {
+    border:1px solid rgba(107,181,114,.3); border-radius:10px;
+    padding:8px 10px; font-size:14px; font-family:inherit;
+    background:#fff; -webkit-user-select:text; user-select:text;
+  }
+  select { color:var(--deep); }
 </style>
 </head>
 <body>
 
-<!-- 背景叶子 -->
 <svg class="bg-leaf a" viewBox="0 0 100 100"><path d="M20 80 C20 40 60 20 80 20 C80 60 40 80 20 80 Z" fill="#3E8E5A"/></svg>
 <svg class="bg-leaf b" viewBox="0 0 100 100"><path d="M20 80 C20 40 60 20 80 20 C80 60 40 80 20 80 Z" fill="#6BB572"/></svg>
 
@@ -225,147 +200,92 @@
 
 <script>
 // ============================================================
-// DATA  —  v3 晚餐方案
+// DEFAULTS
 // ============================================================
 
 const WEEKDAYS = ["周一","周二","周三","周四","周五","周六","周日"];
 
-const MEALS = [
-  { // 周一 · 巴沙鱼
-    type: "fish", tag: "水煮", tag2: "巴沙鱼 300g",
-    dishes: [
-      { emoji:"🐟", name:"清水煮巴沙鱼片", ing:"巴沙鱼 1袋(300g)、料酒少许",
-        how:"水烧开+料酒，鱼片入锅煮3分钟，捞出蘸生抽" },
-      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g",
-        how:"煮鱼的水顺便焯2分钟" },
-      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml",
-        how:"燕麦开水泡3分钟，倒入牛奶" },
-      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 2片",
-        how:"不用加工" },
-      { emoji:"🍌", name:"香蕉", ing:"香蕉 1根",
-        how:"餐后吃" }
+const DEFAULTS = [
+  { type:"fish", tag:"水煮",
+    dishes:[
+      { emoji:"🐟", name:"清水煮巴沙鱼片", ing:"巴沙鱼 1袋(300g)、料酒少许", how:"水烧开+料酒，鱼片入锅煮3分钟，捞出蘸生抽" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"煮鱼的水顺便焯2分钟" },
+      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml", how:"燕麦开水泡3分钟，倒入牛奶" },
+      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 2片", how:"不用加工" },
+      { emoji:"🍌", name:"香蕉", ing:"香蕉 1根", how:"餐后吃" }
     ],
-    dinnerCal: 1080, dinnerPro: 64,
-    totalPro: 107, totalCal: 1748,
-    note: "巴沙鱼自带42g蛋白偏高，但增肌有利无需纠结"
+    dinnerCal:1080, dinnerPro:64, totalPro:107, totalCal:1748,
+    note:"巴沙鱼自带42g蛋白偏高，但增肌有利无需纠结"
   },
-  { // 周二 · 鸡排
-    type: "chicken", tag: "煎", tag2: "鸡排 200g",
-    dishes: [
-      { emoji:"🐔", name:"蒜香煎鸡排", ing:"鸡排 2片(200g)、蒜末、生抽、料酒",
-        how:"蒜末+生抽+料酒腌5分钟，中火煎至两面金黄" },
-      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 2个、西红柿 200g",
-        how:"先炒蛋盛出，再炒西红柿，合炒" },
-      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g",
-        how:"焯水2分钟" },
-      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 1片",
-        how:"不用加工" },
-      { emoji:"🥛", name:"牛奶", ing:"牛奶 200ml",
-        how:"直接喝" },
-      { emoji:"🫐", name:"蓝莓", ing:"蓝莓 80g",
-        how:"餐后 / 混燕麦吃" }
+  { type:"chicken", tag:"煎",
+    dishes:[
+      { emoji:"🐔", name:"蒜香煎鸡排", ing:"鸡排 2片(200g)、蒜末、生抽、料酒", how:"蒜末+生抽+料酒腌5分钟，中火煎至两面金黄" },
+      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 2个、西红柿 200g", how:"先炒蛋盛出，再炒西红柿，合炒" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"焯水2分钟" },
+      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 1片", how:"不用加工" },
+      { emoji:"🥛", name:"牛奶", ing:"牛奶 200ml", how:"直接喝" },
+      { emoji:"🫐", name:"蓝莓", ing:"蓝莓 80g", how:"餐后 / 混燕麦吃" }
     ],
-    dinnerCal: 970, dinnerPro: 57,
-    totalPro: 100, totalCal: 1638,
-    note: ""
+    dinnerCal:970, dinnerPro:57, totalPro:100, totalCal:1638, note:""
   },
-  { // 周三 · 牛排
-    type: "beef", tag: "煎", tag2: "牛排 130g",
-    dishes: [
-      { emoji:"🥩", name:"黑椒牛排", ing:"牛排 1片(130g)、黑胡椒碎、盐",
-        how:"两面撒黑胡椒+盐，大火每面2分钟" },
-      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 3个、西红柿 200g",
-        how:"先炒蛋盛出，再炒西红柿，合炒" },
-      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g",
-        how:"焯水2分钟" },
-      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml",
-        how:"燕麦开水泡3分钟，倒入牛奶" },
-      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 1片",
-        how:"不用加工" },
-      { emoji:"🍌", name:"香蕉", ing:"香蕉 1根",
-        how:"餐后吃" }
+  { type:"beef", tag:"煎",
+    dishes:[
+      { emoji:"🥩", name:"黑椒牛排", ing:"牛排 1片(130g)、黑胡椒碎、盐", how:"两面撒黑胡椒+盐，大火每面2分钟" },
+      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 3个、西红柿 200g", how:"先炒蛋盛出，再炒西红柿，合炒" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"焯水2分钟" },
+      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml", how:"燕麦开水泡3分钟，倒入牛奶" },
+      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 1片", how:"不用加工" },
+      { emoji:"🍌", name:"香蕉", ing:"香蕉 1根", how:"餐后吃" }
     ],
-    dinnerCal: 1100, dinnerPro: 58,
-    totalPro: 101, totalCal: 1768,
-    note: "每周第一牛。黑胡椒是灵魂，别省"
+    dinnerCal:1100, dinnerPro:58, totalPro:101, totalCal:1768,
+    note:"每周第一牛。黑胡椒是灵魂，别省"
   },
-  { // 周四 · 鸡排水煮
-    type: "chicken", tag: "水煮", tag2: "鸡排 200g",
-    dishes: [
-      { emoji:"🐔", name:"水煮鸡排", ing:"鸡排 2片(200g)、料酒",
-        how:"水烧开+料酒，鸡排煮熟约6分钟，切片蘸生抽换口味" },
-      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 2个、西红柿 200g",
-        how:"先炒蛋盛出，再炒西红柿，合炒" },
-      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g",
-        how:"焯水2分钟" },
-      { emoji:"🌽", name:"水果玉米", ing:"水果玉米 1根",
-        how:"煮15分钟（和鸡排一锅水" },
-      { emoji:"🥛", name:"牛奶", ing:"牛奶 200ml",
-        how:"直接喝" }
+  { type:"chicken", tag:"水煮",
+    dishes:[
+      { emoji:"🐔", name:"水煮鸡排", ing:"鸡排 2片(200g)、料酒", how:"水烧开+料酒，鸡排煮熟约6分钟，切片蘸生抽换口味" },
+      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 2个、西红柿 200g", how:"先炒蛋盛出，再炒西红柿，合炒" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"焯水2分钟" },
+      { emoji:"🌽", name:"水果玉米", ing:"水果玉米 1根", how:"煮15分钟（和鸡排一锅水）" },
+      { emoji:"🥛", name:"牛奶", ing:"牛奶 200ml", how:"直接喝" }
     ],
-    dinnerCal: 950, dinnerPro: 57,
-    totalPro: 100, totalCal: 1618,
-    note: ""
+    dinnerCal:950, dinnerPro:57, totalPro:100, totalCal:1618, note:""
   },
-  { // 周五 · 巴沙鱼煲
-    type: "fish", tag: "番茄煮", tag2: "巴沙鱼 300g",
-    dishes: [
-      { emoji:"🐟", name:"番茄巴沙鱼煲", ing:"巴沙鱼 1袋(300g)、西红柿",
-        how:"西红柿炒出汁→加水→鱼块入锅煮5分钟→淋生抽。酸味压腥" },
-      { emoji:"🥬", name:"焯西兰花", ing:"西兰花 200g",
-        how:"焯水2分钟" },
-      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml",
-        how:"燕麦开水泡3分钟，倒入牛奶" },
-      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 2片",
-        how:"不用加工" },
-      { emoji:"🫐", name:"蓝莓", ing:"蓝莓 80g",
-        how:"餐后吃" }
+  { type:"fish", tag:"番茄煮",
+    dishes:[
+      { emoji:"🐟", name:"番茄巴沙鱼煲", ing:"巴沙鱼 1袋(300g)、西红柿", how:"西红柿炒出汁→加水→鱼块入锅煮5分钟→淋生抽。酸味压腥" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"焯水2分钟" },
+      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml", how:"燕麦开水泡3分钟，倒入牛奶" },
+      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 2片", how:"不用加工" },
+      { emoji:"🫐", name:"蓝莓", ing:"蓝莓 80g", how:"餐后吃" }
     ],
-    dinnerCal: 1070, dinnerPro: 65,
-    totalPro: 108, totalCal: 1738,
-    note: "番茄的酸能压住鱼腥，炒出红油再加水效果最好"
+    dinnerCal:1070, dinnerPro:65, totalPro:108, totalCal:1738,
+    note:"番茄的酸能压住鱼腥，炒出红油再加水效果最好"
   },
-  { // 周六 · 鸡排三明治
-    type: "chicken", tag: "煎", tag2: "鸡排 200g",
-    dishes: [
-      { emoji:"🐔", name:"鸡排三明治", ing:"鸡排 2片(200g)、全麦面包 2片、西红柿 150g",
-        how:"鸡排生抽+料酒腌→煎熟→夹面包+西红柿片" },
-      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 2个",
-        how:"先炒蛋盛出，再炒西红柿，合炒" },
-      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g",
-        how:"焯水2分钟" },
-      { emoji:"🥛", name:"牛奶", ing:"牛奶 200ml",
-        how:"直接喝" },
-      { emoji:"🍌", name:"香蕉", ing:"香蕉 1根",
-        how:"餐后吃" }
+  { type:"chicken", tag:"煎",
+    dishes:[
+      { emoji:"🐔", name:"鸡排三明治", ing:"鸡排 2片(200g)、全麦面包 2片、西红柿 150g", how:"鸡排生抽+料酒腌→煎熟→夹面包+西红柿片" },
+      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 2个", how:"先炒蛋盛出，再炒西红柿，合炒" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"焯水2分钟" },
+      { emoji:"🥛", name:"牛奶", ing:"牛奶 200ml", how:"直接喝" },
+      { emoji:"🍌", name:"香蕉", ing:"香蕉 1根", how:"餐后吃" }
     ],
-    dinnerCal: 1020, dinnerPro: 57,
-    totalPro: 100, totalCal: 1688,
-    note: "鸡排提前煎好也行，但放凉了口感差，建议现做"
+    dinnerCal:1020, dinnerPro:57, totalPro:100, totalCal:1688,
+    note:"鸡排提前煎好也行，但放凉了口感差，建议现做"
   },
-  { // 周日 · 牛排
-    type: "beef", tag: "煎", tag2: "牛排 130g",
-    dishes: [
-      { emoji:"🥩", name:"黑椒牛排", ing:"牛排 1片(130g)、黑胡椒碎、盐",
-        how:"两面撒黑胡椒+盐，大火每面2分钟" },
-      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 3个、西红柿 200g",
-        how:"先炒蛋盛出，再炒西红柿，合炒" },
-      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g",
-        how:"焯水2分钟" },
-      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml",
-        how:"燕麦开水泡3分钟，倒入牛奶" },
-      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 1片",
-        how:"不用加工" },
-      { emoji:"🫐", name:"蓝莓", ing:"蓝莓 80g",
-        how:"餐后吃" }
+  { type:"beef", tag:"煎",
+    dishes:[
+      { emoji:"🥩", name:"黑椒牛排", ing:"牛排 1片(130g)、黑胡椒碎、盐", how:"两面撒黑胡椒+盐，大火每面2分钟" },
+      { emoji:"🍳", name:"西红柿炒蛋", ing:"鸡蛋 3个、西红柿 200g", how:"先炒蛋盛出，再炒西红柿，合炒" },
+      { emoji:"🥦", name:"焯西兰花", ing:"西兰花 200g", how:"焯水2分钟" },
+      { emoji:"🥛", name:"牛奶燕麦", ing:"燕麦 30g、牛奶 200ml", how:"燕麦开水泡3分钟，倒入牛奶" },
+      { emoji:"🍞", name:"全麦面包", ing:"全麦面包 1片", how:"不用加工" },
+      { emoji:"🫐", name:"蓝莓", ing:"蓝莓 80g", how:"餐后吃" }
     ],
-    dinnerCal: 1110, dinnerPro: 58,
-    totalPro: 101, totalCal: 1778,
-    note: "每周第二牛。和周三隔4天，红肉频率合理"
-  },
+    dinnerCal:1110, dinnerPro:58, totalPro:101, totalCal:1778,
+    note:"每周第二牛。和周三隔4天，红肉频率合理"
+  }
 ];
 
-// 4g蛋白+245kcal/片面包, 6g蛋白+150kcal/蛋
 const SHOP = [
   { emoji:"🥩", name:"牛排 (130g/片)", qty:"2 片" },
   { emoji:"🐔", name:"鸡排 (100g/片)", qty:"6 片" },
@@ -379,7 +299,7 @@ const SHOP = [
   { emoji:"🌾", name:"燕麦片 (30g/袋)", qty:"7 袋" },
   { emoji:"🍌", name:"香蕉", qty:"7 根" },
   { emoji:"🫐", name:"蓝莓", qty:"≈400 g" },
-  { emoji:"🧂", name:"生抽 / 料酒 / 黑胡椒碎", qty:"—" },
+  { emoji:"🧂", name:"生抽 / 料酒 / 黑胡椒碎", qty:"—" }
 ];
 
 const NOTES = [
@@ -387,32 +307,74 @@ const NOTES = [
   "牛排别煎老：大火两面各2分钟就是七分熟，超过3分钟就柴了。",
   "热量偏低：全天≈1700千卡，距增肌目标差700。如果体重不涨：下午3-4点加一餐（1片面包+200ml牛奶+1根香蕉≈350千卡），或午餐米饭从250g加到350g。",
   "西红柿连续7天，如果胃酸偏多，每周拿2天换成西兰花加量到250g。",
-  "蛋白100g对57kg来说在1.6g/kg(91g)和1.8g/kg(103g)之间，够用。巴沙鱼日偏高那几克不用纠结。",
+  "蛋白100g对57kg来说在1.6g/kg(91g)和1.8g/kg(103g)之间，够用。巴沙鱼日偏高那几克不用纠结。"
 ];
 
 // ============================================================
-// RENDER
+// EDIT STORAGE
 // ============================================================
 
-let tab = "today";
+const EDIT_KEY = "dinner_custom_v1";
 
-function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function loadEdits() {
+  try { return JSON.parse(localStorage.getItem(EDIT_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+function saveEdits(edits) { localStorage.setItem(EDIT_KEY, JSON.stringify(edits)); }
 
-function todayIndex() { return (new Date().getDay() + 6) % 7; }
+// merge custom edits onto defaults, returning a full 7-day array
+function getMeals() {
+  const edits = loadEdits();
+  return DEFAULTS.map((d,i) => {
+    if (!edits[i]) return {...d, dishes:d.dishes.map(x=>({...x})), _custom:false};
+    return {...d, ...edits[i], dishes:(edits[i].dishes||d.dishes).map(x=>({...x})), _custom:true};
+  });
+}
+function isCustom(dayIndex) { return !!loadEdits()[dayIndex]; }
 
+// ============================================================
+// RENDER HELPERS
+// ============================================================
+
+let tab = "today", editing = null;
+let MEALS = getMeals(); // refreshed on render
+
+function esc(s) { return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function todayIndex() { return (new Date().getDay()+6)%7; }
 function dateStr() {
   const d = new Date();
   return `${d.getMonth()+1}月${d.getDate()}日 星期${"日一二三四五六"[d.getDay()]}`;
 }
-
-function typeClass(t) { return t === "fish" ? "fish" : t === "chicken" ? "chicken" : "beef"; }
-function typeLabel(t) { return t === "fish" ? "🐟 鱼" : t === "chicken" ? "🐔 鸡" : "🥩 牛"; }
+function typeClass(t) { return t==="fish"?"fish":t==="chicken"?"chicken":"beef"; }
+function typeLabel(t) { return t==="fish"?"🐟 鱼":t==="chicken"?"🐔 鸡":"🥩 牛"; }
 function proStatus(p) {
-  return p >= 100 ? '<span class="status pass">✅ 蛋白 ' + p + 'g · 达标</span>'
-    : '<span class="status warn">⚠️ 蛋白 ' + p + 'g · 差' + (100-p) + 'g</span>';
+  return p>=100
+    ? '<span class="status pass">✅ 蛋白 '+p+'g · 达标</span>'
+    : '<span class="status warn">⚠️ 蛋白 '+p+'g · 差'+(100-p)+'g</span>';
 }
 
+function renderDayCards(m) {
+  return m.dishes.map(d=>`
+    <div class="dish-card">
+      <div class="title-row"><span class="emoji">${d.emoji}</span><span class="dish-name">${esc(d.name)}</span></div>
+      <div class="ingredients">${esc(d.ing)}</div>
+      <div class="how">${esc(d.how)}</div>
+    </div>
+  `).join("") + `
+    <div class="nutrition-bar">
+      <div class="nut"><div class="val">${m.dinnerCal}</div><div class="label">晚餐 千卡</div></div>
+      <div class="nut"><div class="val">${m.dinnerPro}g</div><div class="label">晚餐 蛋白</div></div>
+      <div class="nut"><div class="val">${m.totalPro}g</div><div class="label">全天 蛋白</div></div>
+      <div class="nut"><div class="val">${m.totalCal}</div><div class="label">全天 千卡</div></div>
+    </div>`;
+}
+
+// ============================================================
+// PAGES
+// ============================================================
+
 function renderToday() {
+  MEALS = getMeals();
   const m = MEALS[todayIndex()];
   return `<h1>今天吃什么</h1>
     <div class="subtitle">${dateStr()}</div>
@@ -422,14 +384,16 @@ function renderToday() {
 }
 
 function renderWeek() {
+  MEALS = getMeals();
   return `<h1>7 天循环</h1>
     <div class="subtitle">🐟→🐔→🥩→🐔→🐟→🐔→🥩</div>
-    ${MEALS.map((m,i) =>
-      `<div style="margin-bottom:20px">
+    ${MEALS.map((m,i)=>`
+      <div style="margin-bottom:20px">
         <div class="day-header">
-          <span class="day-label ${typeClass(m.type)}">${WEEKDAYS[i]} · ${typeLabel(m.type)} ${m.tag}</span>
+          <span class="day-label ${typeClass(m.type)}">${WEEKDAYS[i]} · ${typeLabel(m.type)} ${m.tag}${m._custom?' 🔧':''}</span>
+          <button class="edit-btn" onclick="openEdit(${i})" title="编辑">✏️</button>
         </div>
-        ${m.dishes.map(d => `
+        ${m.dishes.map(d=>`
           <div class="dish-card">
             <div class="title-row"><span class="emoji">${d.emoji}</span><span class="dish-name">${esc(d.name)}</span></div>
             <div class="ingredients">${esc(d.ing)}</div>
@@ -442,39 +406,35 @@ function renderWeek() {
           <div class="nut"><div class="val">${m.totalPro}g</div><div class="label">全天 蛋白</div></div>
           <div class="nut"><div class="val">${m.totalCal}</div><div class="label">全天 千卡</div></div>
         </div>
-        ${m.totalPro >= 100
-          ? '<div class="status pass">✅ 达标</div>'
-          : '<div class="status warn">⚠️ 差 '+(100-m.totalPro)+'g</div>'}
-        ${m.note ? `<div class="note">${esc(m.note)}</div>` : ""}
-      </div>`
-    ).join("")}`;
+        ${m.totalPro>=100?'<div class="status pass">✅ 达标</div>':'<div class="status warn">⚠️ 差 '+(100-m.totalPro)+'g</div>'}
+        ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
+      </div>
+    `).join("")}`;
 }
 
 function renderSummary() {
+  MEALS = getMeals();
   const avgPro = Math.round(MEALS.reduce((s,m)=>s+m.totalPro,0)/7);
   const avgCal = Math.round(MEALS.reduce((s,m)=>s+m.totalCal,0)/7);
-  const rows = MEALS.map((m,i) =>
-    `<tr>
-      <td class="day" style="font-weight:700">${WEEKDAYS[i]}</td>
+  const rows = MEALS.map((m,i)=>`
+    <tr>
+      <td class="day">${WEEKDAYS[i]}</td>
       <td class="meat"><span class="day-label ${typeClass(m.type)}" style="font-size:14px;padding:2px 8px;display:inline-block">${typeLabel(m.type)} ${m.tag}</span></td>
       <td>${m.dinnerPro}g</td>
-      <td class="${m.totalPro >= 100 ? 'pass' : 'warn'}">${m.totalPro}g</td>
-      <td class="${m.totalPro >= 100 ? 'pass' : 'warn'}">${m.totalPro >= 100 ? '✅' : '⚠️'}</td>
+      <td class="${m.totalPro>=100?'pass':'warn'}">${m.totalPro}g</td>
+      <td class="${m.totalPro>=100?'pass':'warn'}">${m.totalPro>=100?'✅':'⚠️'}</td>
       <td>${m.totalCal}</td>
-    </tr>`
-  ).join("");
-
+    </tr>
+  `).join("");
   return `<h1>7 天汇总</h1>
     <div class="subtitle">均值：蛋白 ${avgPro}g · 热量 ${avgCal} 千卡</div>
     <table class="summary-table">
-      <thead><tr>
-        <th>日期</th><th>主蛋白</th><th>晚餐蛋白</th><th>全天蛋白</th><th>达标</th><th>全天热量</th>
-      </tr></thead>
+      <thead><tr><th>日期</th><th>主蛋白</th><th>晚餐蛋白</th><th>全天蛋白</th><th>达标</th><th>全天热量</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
     <div style="margin-top:16px">
-      <h2 style="font-size:17px;margin:0 0 8px">注意</h2>
-      ${NOTES.map(n => `<div class="note">${esc(n)}</div>`).join("")}
+      <h2>注意</h2>
+      ${NOTES.map(n=>`<div class="note">${esc(n)}</div>`).join("")}
     </div>`;
 }
 
@@ -482,48 +442,185 @@ function renderShop() {
   return `<h1>每周采购清单</h1>
     <div class="subtitle">按这个买，一周刚好用完</div>
     <ul class="shop-list">
-      ${SHOP.map(s =>
-        `<li><span>${s.emoji}</span> ${esc(s.name)} <span class="qty">${esc(s.qty)}</span></li>`
-      ).join("")}
+      ${SHOP.map(s=>`<li><span>${s.emoji}</span> ${esc(s.name)} <span class="qty">${esc(s.qty)}</span></li>`).join("")}
     </ul>
     <div class="note" style="margin-top:12px">调料你已有油、盐、生抽、料酒。黑胡椒碎（5块钱）建议补齐 — 牛排的灵魂。</div>`;
 }
 
-function renderDayCards(m) {
-  return m.dishes.map(d => `
-    <div class="dish-card">
-      <div class="title-row"><span class="emoji">${d.emoji}</span><span class="dish-name">${esc(d.name)}</span></div>
-      <div class="ingredients">${esc(d.ing)}</div>
-      <div class="how">${esc(d.how)}</div>
-    </div>
-  `).join("")
-  + `<div class="nutrition-bar">
-      <div class="nut"><div class="val">${m.dinnerCal}</div><div class="label">晚餐 千卡</div></div>
-      <div class="nut"><div class="val">${m.dinnerPro}g</div><div class="label">晚餐 蛋白</div></div>
-      <div class="nut"><div class="val">${m.totalPro}g</div><div class="label">全天 蛋白</div></div>
-      <div class="nut"><div class="val">${m.totalCal}</div><div class="label">全天 千卡</div></div>
-    </div>`;
+// ============================================================
+// EDIT MODE
+// ============================================================
+
+function openEdit(day) {
+  editing = day;
+  MEALS = getMeals();
+  render();
+  window.scrollTo(0,0);
 }
+
+function closeEdit() {
+  editing = null;
+  render();
+}
+
+function resetDay(day) {
+  if (!confirm('恢复 ' + WEEKDAYS[day] + ' 到默认方案？你的修改会丢失。')) return;
+  const edits = loadEdits();
+  delete edits[day];
+  saveEdits(edits);
+  MEALS = getMeals();
+  render();
+}
+
+function saveEdit(day) {
+  const m = MEALS[day];
+  const container = document.getElementById("edit-form");
+  if (!container) return;
+
+  // read dishes
+  const dishCards = container.querySelectorAll(".edit-card");
+  const dishes = [];
+  dishCards.forEach(card=>{
+    const emoji = card.querySelector(".e-emoji").value;
+    const name = card.querySelector(".e-name").value;
+    const ing = card.querySelector('[data-field="ing"]').value;
+    const how = card.querySelector('[data-field="how"]').value;
+    if (name.trim()) dishes.push({emoji, name, ing, how});
+  });
+
+  // read nutrition
+  const dinnerCal = +container.querySelector('[data-field="dinnerCal"]').value || 0;
+  const dinnerPro = +container.querySelector('[data-field="dinnerPro"]').value || 0;
+  const totalPro = +container.querySelector('[data-field="totalPro"]').value || 0;
+  const totalCal = +container.querySelector('[data-field="totalCal"]').value || 0;
+  const tag = container.querySelector('[data-field="tag"]').value;
+  const type = container.querySelector('[data-field="type"]').value;
+  const note = container.querySelector('[data-field="note"]').value;
+
+  const edits = loadEdits();
+  edits[day] = { dishes, dinnerCal, dinnerPro, totalPro, totalCal, type, tag, note };
+  saveEdits(edits);
+  editing = null;
+  MEALS = getMeals();
+  render();
+  alert('✅ ' + WEEKDAYS[day] + ' 已保存！');
+}
+
+function addDish(day) {
+  const container = document.getElementById("dish-list");
+  if (!container) return;
+  const i = container.querySelectorAll(".edit-card").length;
+  const div = document.createElement("div");
+  div.className = "edit-card";
+  div.innerHTML = `
+    <div class="row"><span class="drag-handle">☰</span>
+      <input class="e-emoji" value="🍽️" style="width:44px;text-align:center;font-size:20px;padding:4px">
+      <input class="e-name" value="新菜品" placeholder="菜名">
+      <button class="del-dish" onclick="this.closest('.edit-card').remove()">✕</button>
+    </div>
+    <div class="row"><input data-field="ing" value="" placeholder="食材和用量，如：鸡排 2片(200g)"></div>
+    <div class="row"><textarea data-field="how" placeholder="做法，如：生抽+料酒腌5分钟，中火煎至两面金黄" rows="2" style="width:100%"></textarea></div>
+  `;
+  container.appendChild(div);
+  div.querySelector(".e-name").focus();
+}
+
+function renderEdit(day) {
+  const m = MEALS[day];
+  const edits = loadEdits();
+  const hasCustom = !!edits[day];
+  return `
+    <button class="back-btn" onclick="closeEdit()">‹ 返回一周</button>
+    <h1>编辑 ${WEEKDAYS[day]}</h1>
+    <div class="subtitle">修改完点底部「保存」</div>
+
+    <div class="meta-label">分类</div>
+    <div class="section-row">
+      <select data-field="type" style="flex:1">
+        <option value="fish" ${m.type==='fish'?'selected':''}>🐟 鱼</option>
+        <option value="chicken" ${m.type==='chicken'?'selected':''}>🐔 鸡</option>
+        <option value="beef" ${m.type==='beef'?'selected':''}>🥩 牛</option>
+      </select>
+      <input data-field="tag" value="${esc(m.tag||'')}" placeholder="做法标签，如：煎、水煮" style="flex:1">
+    </div>
+
+    <div class="meta-label">菜品 <span style="font-weight:400;color:rgba(40,84,58,.4)">(${m.dishes.length} 道)</span></div>
+    <div id="dish-list">
+      ${m.dishes.map(d=>`
+        <div class="edit-card">
+          <div class="row"><span class="drag-handle">☰</span>
+            <input class="e-emoji" value="${esc(d.emoji)}" style="width:44px;text-align:center;font-size:20px;padding:4px">
+            <input class="e-name" value="${esc(d.name)}" placeholder="菜名">
+            <button class="del-dish" onclick="this.closest('.edit-card').remove()">✕</button>
+          </div>
+          <div class="row"><input data-field="ing" value="${esc(d.ing)}" placeholder="食材和用量"></div>
+          <div class="row"><textarea data-field="how" placeholder="做法" rows="2" style="width:100%">${esc(d.how)}</textarea></div>
+        </div>
+      `).join("")}
+    </div>
+    <div class="add-btn-row" style="margin-top:8px">
+      <button class="btn outline small" onclick="addDish(${day})">+ 添加一道菜</button>
+    </div>
+
+    <div class="meta-label">营养数据</div>
+    <div class="nut-row">
+      <div class="nut"><div class="label">晚餐 千卡</div><input data-field="dinnerCal" type="number" value="${m.dinnerCal}" style="text-align:center;border:none;background:transparent;font-size:16px;font-weight:800;color:var(--deep);width:100%;padding:4px"></div>
+      <div class="nut"><div class="label">晚餐 蛋白g</div><input data-field="dinnerPro" type="number" value="${m.dinnerPro}" style="text-align:center;border:none;background:transparent;font-size:16px;font-weight:800;color:var(--deep);width:100%;padding:4px"></div>
+      <div class="nut"><div class="label">全天 蛋白g</div><input data-field="totalPro" type="number" value="${m.totalPro}" style="text-align:center;border:none;background:transparent;font-size:16px;font-weight:800;color:var(--deep);width:100%;padding:4px"></div>
+      <div class="nut"><div class="label">全天 千卡</div><input data-field="totalCal" type="number" value="${m.totalCal}" style="text-align:center;border:none;background:transparent;font-size:16px;font-weight:800;color:var(--deep);width:100%;padding:4px"></div>
+    </div>
+
+    <div class="meta-label">备注</div>
+    <textarea data-field="note" placeholder="如：巴沙鱼自带42g蛋白偏高..." rows="2" style="width:100%;border:1px solid rgba(107,181,114,.3);border-radius:10px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff;-webkit-user-select:text;user-select:text">${esc(m.note||'')}</textarea>
+
+    <div style="display:flex;gap:8px;margin-top:18px">
+      <button class="btn primary" onclick="saveEdit(${day})" style="flex:1">💾 保存</button>
+      ${hasCustom ? `<button class="btn danger" onclick="resetDay(${day})" style="flex:1">↩ 恢复默认</button>` : ''}
+    </div>
+    <div id="edit-form" style="display:none"></div>
+  `;
+}
+
+// ============================================================
+// MAIN RENDER
+// ============================================================
 
 function render() {
   const s = document.getElementById("screen");
-  if (tab === "today")   s.innerHTML = renderToday();
-  else if (tab === "week")  s.innerHTML = '<div class="page">' + renderWeek() + '</div>';
-  else if (tab === "summary") s.innerHTML = '<div class="page">' + renderSummary() + '</div>';
-  else if (tab === "shop") s.innerHTML = '<div class="page">' + renderShop() + '</div>';
-  document.querySelectorAll(".tab").forEach(b =>
+  if (editing !== null) {
+    s.innerHTML = '<div class="page">' + renderEdit(editing) + '</div>';
+    // copy edit form data on save by scanning actual DOM
+    const dummy = document.createElement("div");
+    dummy.id = "edit-form";
+    s.appendChild(dummy);
+  } else if (tab === "today") {
+    s.innerHTML = renderToday();
+  } else if (tab === "week") {
+    s.innerHTML = '<div class="page">' + renderWeek() + '</div>';
+  } else if (tab === "summary") {
+    s.innerHTML = '<div class="page">' + renderSummary() + '</div>';
+  } else if (tab === "shop") {
+    s.innerHTML = '<div class="page">' + renderShop() + '</div>';
+  }
+  document.querySelectorAll(".tab").forEach(b=>
     b.classList.toggle("active", b.dataset.tab === tab));
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-document.querySelectorAll(".tab").forEach(b =>
-  b.addEventListener("click", () => { tab = b.dataset.tab; render(); }));
+// tab clicks
+document.querySelectorAll(".tab").forEach(b=>
+  b.addEventListener("click", ()=>{
+    tab = b.dataset.tab;
+    editing = null;
+    MEALS = getMeals();
+    render();
+  }));
 
 render();
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () =>
-    navigator.serviceWorker.register("sw.js").catch(() => {}));
+  window.addEventListener("load", ()=>
+    navigator.serviceWorker.register("sw.js").catch(()=>{}));
 }
 </script>
 </body>
