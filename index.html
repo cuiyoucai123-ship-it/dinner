@@ -396,7 +396,7 @@ const NOTES = [
 
 let tab = "today";
 
-function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[/**/{[c]}]||c)); }
+function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 function todayIndex() { return (new Date().getDay() + 6) % 7; }
 
