@@ -1,4 +1,4 @@
-const CACHE = "dinner-v1";
+const CACHE = "dinner-v2";
 const ASSETS = [
   "./",
   "./index.html",
@@ -24,14 +24,14 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
+  // network-first: 优先网络，失败才走缓存
   e.respondWith(
-    caches.match(e.request).then(cached =>
-      cached ||
-      fetch(e.request).then(resp => {
+    fetch(e.request)
+      .then(resp => {
         const copy = resp.clone();
         caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
         return resp;
-      }).catch(() => caches.match("./index.html"))
-    )
+      })
+      .catch(() => caches.match(e.request).then(c => c || caches.match("./index.html")))
   );
 });
