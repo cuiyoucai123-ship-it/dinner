@@ -474,7 +474,7 @@ function resetDay(day) {
 
 function saveEdit(day) {
   const m = MEALS[day];
-  const container = document.getElementById("edit-form");
+  const container = document.getElementById("screen");
   if (!container) return;
 
   // read dishes
@@ -589,10 +589,6 @@ function render() {
   const s = document.getElementById("screen");
   if (editing !== null) {
     s.innerHTML = '<div class="page">' + renderEdit(editing) + '</div>';
-    // copy edit form data on save by scanning actual DOM
-    const dummy = document.createElement("div");
-    dummy.id = "edit-form";
-    s.appendChild(dummy);
   } else if (tab === "today") {
     s.innerHTML = renderToday();
   } else if (tab === "week") {
