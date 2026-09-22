@@ -1,7 +1,9 @@
-const CACHE = "dinner-v3";
+const CACHE = "dinner-v4";
 const ASSETS = [
   "./",
   "./index.html",
+  "./app.js",
+  "./plan-migration.js",
   "./manifest.webmanifest",
   "./icon-192.png",
   "./icon-512.png",
@@ -17,21 +19,25 @@ self.addEventListener("install", e => {
 self.addEventListener("activate", e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith("dinner-") && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
 
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
+  if (new URL(e.request.url).origin !== self.location.origin) return;
   // network-first: 优先网络，失败才走缓存
   e.respondWith(
     fetch(e.request)
       .then(resp => {
-        const copy = resp.clone();
-        caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
+        if (resp.ok) {
+          const copy = resp.clone();
+          caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {});
+        }
         return resp;
       })
-      .catch(() => caches.match(e.request).then(c => c || caches.match("./index.html")))
+      .catch(async () => (await caches.match(e.request)) ||
+        (e.request.mode === "navigate" ? await caches.match("./index.html") : undefined) || Response.error())
   );
 });

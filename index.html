@@ -2,317 +2,84 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>每日饭单</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="每日饭单">
 <meta name="theme-color" content="#EEF4E8">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>
-  :root {
-    --ink:#234332; --muted:#708276; --leaf:#527B5B; --leaf-dark:#355D43;
-    --leaf-soft:#E4EFE2; --paper:#FBFCF7; --line:#DCE6DA;
-    --warm-soft:#F7E9DE; --danger:#B9594F;
-    --shadow:0 8px 24px rgba(50,80,58,.08);
-  }
+  :root { --ink:#234332; --muted:#66796C; --leaf:#355D43; --line:#DBE5D8; --paper:#FBFCF7; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { margin:0; min-height:100%; }
-  body {
-    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;
-    color:var(--ink); background:#EEF4E8; -webkit-user-select:none; user-select:none;
-  }
+  body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif; color:var(--ink); background:#EEF4E8; }
   button,input,textarea { font:inherit; }
-  button { color:inherit; }
-  .app {
-    width:min(100%,580px); min-height:100vh; margin:0 auto;
-    padding:calc(env(safe-area-inset-top) + 15px) 14px calc(env(safe-area-inset-bottom) + 24px);
-  }
-  .topbar { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin:2px 3px 14px; }
-  h1 { margin:0; font-size:27px; line-height:1.15; letter-spacing:-.5px; }
-  .date { margin-top:5px; color:var(--muted); font-size:14px; }
-  .today-button {
-    min-height:40px; padding:0 13px; border:1px solid var(--line); border-radius:13px;
-    background:rgba(255,255,255,.66); color:var(--leaf-dark); font-size:13px; font-weight:700;
-  }
-  .week-strip { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:12px; }
-  .day-button {
-    position:relative; min-width:0; min-height:47px; padding:7px 2px 6px; border:0;
-    border-radius:13px; background:transparent; color:var(--muted); font-size:12px; font-weight:700;
-  }
-  .day-button span { display:block; margin-top:2px; font-size:10px; font-weight:600; opacity:.7; }
-  .day-button.active { background:var(--leaf-dark); color:#fff; box-shadow:0 5px 14px rgba(53,93,67,.2); }
-  .day-button.is-today:not(.active)::after {
-    content:""; position:absolute; left:50%; bottom:4px; width:4px; height:4px;
-    margin-left:-2px; border-radius:50%; background:#C97B4C;
-  }
-  .meal-card {
-    overflow:hidden; margin-bottom:10px; border:1px solid rgba(220,230,218,.9);
-    border-radius:20px; background:rgba(251,252,247,.94); box-shadow:var(--shadow);
-  }
-  .meal-card.optional { background:rgba(251,252,247,.77); }
-  .card-head { display:flex; align-items:center; gap:10px; padding:12px 14px 9px; }
-  .meal-icon {
-    display:grid; width:34px; height:34px; place-items:center; border-radius:11px;
-    background:var(--leaf-soft); font-size:18px;
-  }
-  .optional .meal-icon { background:var(--warm-soft); }
-  .card-title { font-size:17px; font-weight:800; }
-  .card-subtitle { margin-top:1px; color:var(--muted); font-size:11px; }
-  .edit-button {
-    display:grid; width:44px; height:44px; margin-left:auto; place-items:center; border:0;
-    border-radius:14px; background:transparent; color:var(--leaf); font-size:14px; font-weight:800;
-  }
-  .edit-button:active { background:var(--leaf-soft); }
-  .food-list { padding:0 14px 12px; }
-  .food-item { padding:8px 0; border-top:1px solid var(--line); }
-  .food-main { display:flex; align-items:baseline; gap:8px; }
-  .food-emoji { width:21px; flex:0 0 21px; font-size:16px; text-align:center; }
-  .food-name { min-width:0; flex:1; font-size:15px; font-weight:720; }
-  .food-amount { flex:0 0 auto; color:var(--leaf-dark); font-size:13px; font-weight:750; text-align:right; }
-  .food-how {
-    margin:4px 0 0 29px; color:var(--muted); font-size:11.5px; line-height:1.48;
-    -webkit-user-select:text; user-select:text;
-  }
-  .empty-card { padding:8px 0 4px; color:var(--muted); font-size:13px; }
+  button { color:inherit; cursor:pointer; }
+  button:focus-visible,input:focus-visible,textarea:focus-visible { outline:2px solid var(--leaf); outline-offset:3px; }
+  .app { width:min(100%,560px); margin:auto; padding:calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 20px); }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 2px 9px; }
+  h1 { margin:0; font-size:25px; line-height:1.25; letter-spacing:-.6px; }
+  .date { margin-top:3px; color:var(--muted); font-size:12px; }
+  .today-button { min-height:44px; padding:0 10px; border:0; border-radius:12px; background:#E0EBDC; font-size:12px; }
+  .week-strip { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:10px; }
+  .day-button { min-width:0; min-height:44px; padding:5px 0; border:0; border-radius:12px; background:transparent; color:var(--muted); font-size:13px; }
+  .day-button span { display:block; font-size:9px; line-height:12px; }
+  .day-button.active { background:var(--leaf); color:white; font-weight:700; }
+  .meal-card { margin-bottom:10px; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--paper); box-shadow:0 3px 14px rgba(50,80,58,.035); }
+  .card-head { display:flex; align-items:center; gap:8px; padding:5px 12px 0; }
+  .meal-icon { display:grid; width:28px; height:28px; place-items:center; border-radius:10px; background:#E7EFE2; font-size:16px; }
+  h2 { display:inline; margin:0; font-size:16px; }
+  .card-subtitle { margin-left:7px; font-size:11px; color:var(--muted); }
+  .head-copy { flex:1; min-width:0; }
+  .edit-button { width:44px; height:44px; margin-left:auto; border:0; background:transparent; color:var(--muted); font-size:12px; }
+  .done-button { flex-shrink:0; min-width:52px; min-height:44px; padding:0 4px; border:0; background:transparent; color:var(--leaf); font-size:12px; font-weight:650; }
+  .done-button:active { background:#E4EDDF; border-radius:10px; }
+  .completed-meals { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin:3px 2px; color:var(--muted); font-size:11px; }
+  .restore-button { min-height:44px; padding:0 9px; border:0; background:transparent; color:var(--leaf); font-size:12px; text-decoration:underline; text-underline-offset:3px; }
+  .day-finished { padding:34px 12px 24px; text-align:center; }
+  .day-finished strong { display:block; margin-bottom:8px; font-size:18px; }
+  .day-finished p { margin:0; color:var(--muted); font-size:12px; }
+  .food-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px 16px; padding:2px 14px 9px; }
+  .food-item { display:flex; justify-content:space-between; align-items:baseline; gap:5px; min-width:0; line-height:1.4; }
+  .food-name { min-width:0; font-size:13px; overflow-wrap:anywhere; }
+  .food-amount { max-width:55%; flex-shrink:0; font-size:12px; font-weight:650; overflow-wrap:anywhere; text-align:right; }
+  .meal-steps { margin:0 14px 11px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:11.5px; line-height:1.65; white-space:pre-line; overflow-wrap:anywhere; }
+  .prep-note { margin:0 12px 10px; padding:8px 10px; background:#E8F0E2; border-radius:10px; color:var(--leaf); font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
+  .evening { margin:0 14px 11px; padding-top:8px; border-top:1px solid var(--line); }
+  .evening-label { display:block; margin-bottom:5px; color:var(--muted); font-size:11px; }
+  .evening .food-list { padding:0; }
+  .snack-card { background:#F9FAF3; }
+  .snack-card .meal-icon { background:#F4EBDD; }
+  .empty-card { grid-column:1/-1; color:var(--muted); font-size:12px; }
+  .weight-note { margin:7px 3px 0; color:var(--muted); font-size:10px; line-height:1.5; }
   .edit-page { padding-bottom:90px; }
-  .edit-topbar { display:flex; align-items:center; gap:10px; margin:0 2px 13px; }
-  .back-button {
-    width:44px; height:44px; border:0; border-radius:14px; background:rgba(255,255,255,.65);
-    color:var(--leaf-dark); font-size:26px;
-  }
-  .edit-heading { font-size:22px; font-weight:850; }
-  .edit-help { margin-top:2px; color:var(--muted); font-size:12px; }
-  .edit-item {
-    margin-bottom:10px; padding:12px; border:1px solid var(--line); border-radius:17px;
-    background:var(--paper); box-shadow:0 4px 14px rgba(50,80,58,.05);
-  }
-  .edit-row { display:grid; grid-template-columns:48px minmax(0,1fr) 105px 40px; gap:7px; align-items:center; }
-  .edit-item input,.edit-item textarea {
-    width:100%; border:1px solid var(--line); border-radius:11px; outline:none;
-    background:#fff; color:var(--ink); -webkit-user-select:text; user-select:text;
-  }
-  .edit-item input { height:40px; padding:0 10px; font-size:14px; }
-  .edit-item .emoji-input { padding:0; font-size:19px; text-align:center; }
-  .edit-item textarea { min-height:66px; margin-top:8px; padding:9px 10px; resize:vertical; font-size:13px; line-height:1.45; }
-  .delete-button {
-    width:40px; height:40px; border:0; border-radius:11px; background:#FAE9E6;
-    color:var(--danger); font-size:18px;
-  }
-  .add-button,.reset-button { min-height:44px; border-radius:13px; font-weight:800; }
-  .add-button {
-    width:100%; border:1.5px dashed #A8BDAA; background:rgba(255,255,255,.45); color:var(--leaf-dark);
-  }
-  .reset-button { margin-top:12px; border:0; background:transparent; color:var(--danger); }
-  .save-bar {
-    position:fixed; right:0; bottom:0; left:0; z-index:3;
-    padding:10px 14px calc(env(safe-area-inset-bottom) + 10px);
-    background:rgba(238,244,232,.88); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
-  }
-  .save-button {
-    display:block; width:min(100%,552px); min-height:50px; margin:0 auto; border:0;
-    border-radius:15px; background:var(--leaf-dark); color:#fff; font-size:16px; font-weight:850;
-    box-shadow:0 7px 18px rgba(53,93,67,.22);
-  }
-  .toast {
-    position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom) + 22px); z-index:10;
-    padding:10px 15px; border-radius:999px; background:rgba(35,67,50,.94); color:#fff;
-    font-size:13px; font-weight:700; opacity:0; pointer-events:none;
-    transform:translate(-50%,12px); transition:.2s ease;
-  }
-  .toast.show { opacity:1; transform:translate(-50%,0); }
-  @media (max-width:370px) {
-    .app { padding-right:10px; padding-left:10px; }
-    .day-button { font-size:11px; }
-    .edit-row { grid-template-columns:44px minmax(0,1fr) 86px 40px; }
-  }
+  .edit-topbar { display:flex; align-items:center; gap:10px; margin-bottom:15px; }
+  .back-button { flex-shrink:0; width:44px; height:44px; border:0; border-radius:12px; background:var(--paper); font-size:25px; }
+  .edit-heading { font-size:20px; font-weight:700; }
+  .edit-help { margin-top:4px; font-size:12px; color:var(--muted); }
+  .edit-section-title { display:block; margin:18px 0 9px; font-size:14px; font-weight:650; }
+  .edit-item { display:grid; grid-template-columns:minmax(0,1fr) 90px 44px; align-items:center; gap:7px; margin-bottom:8px; }
+  input,textarea { width:100%; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); font-size:16px; }
+  input { height:44px; min-width:0; padding:0 10px; }
+  textarea { min-height:120px; padding:11px; resize:vertical; line-height:1.6; }
+  .delete-button { width:44px; height:44px; border:0; border-radius:10px; background:#F7E6E0; color:#9B4A3F; font-size:20px; }
+  .add-button { width:100%; min-height:44px; margin:2px 0 6px; border:1px dashed #A7BBA5; border-radius:11px; background:transparent; font-size:14px; }
+  .reset-button { min-height:44px; margin-top:12px; border:0; background:transparent; color:#9B4A3F; font-size:13px; }
+  .storage-help { margin-top:10px; color:var(--muted); font-size:12px; line-height:1.6; }
+  .save-bar { position:fixed; bottom:0; left:0; right:0; padding:10px 14px calc(env(safe-area-inset-bottom) + 10px); background:rgba(238,244,232,.94); backdrop-filter:blur(12px); }
+  .save-button { display:block; width:min(100%,532px); min-height:48px; margin:auto; border:0; border-radius:13px; background:var(--leaf); color:white; font-weight:650; }
+  .toast { position:fixed; bottom:calc(env(safe-area-inset-bottom) + 76px); left:50%; z-index:10; max-width:90%; width:max-content; padding:10px 14px; border-radius:12px; background:#234332; color:white; font-size:13px; opacity:0; pointer-events:none; transform:translateX(-50%); transition:opacity .15s; }
+  .toast.show { opacity:1; }
+  @media (max-width:360px) { .app { padding-left:10px; padding-right:10px; } .food-list { gap:7px 12px; } .edit-item { grid-template-columns:minmax(0,1fr) 80px 44px; } }
 </style>
+<script src="plan-migration.js" defer></script>
+<script src="app.js" defer></script>
 </head>
 <body>
 <main id="app" class="app"></main>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-<script>
-const WEEKDAYS=["周一","周二","周三","周四","周五","周六","周日"];
-const STORAGE_KEY="dailyMeals.v3";
-
-const lunchItems=()=>[
-  {emoji:"🍗",name:"去皮卤琵琶腿",amount:"2个",how:"一次卤三天的量，吃前彻底加热。"},
-  {emoji:"🥚",name:"卤蛋",amount:"1个",how:"与鸡腿一起卤，或换成水煮蛋。"},
-  {emoji:"🍚",name:"三色糙米混白米饭",amount:"原有分量",how:"午餐盛出晚餐需要的米饭后及时冷藏。"},
-  {emoji:"🥬",name:"蔬菜",amount:"按当天安排",how:"青菜、西兰花、胡萝卜、彩椒或西红柿均可搭配。"}
-];
-
-const snackItems=()=>[
-  {emoji:"🥛",name:"下午四点 · 牛奶",amount:"250ml",how:"饿时再喝，不强求。"},
-  {emoji:"🌾",name:"干燕麦",amount:"20～30g",how:"需要时加入牛奶；不饿可以不吃。"},
-  {emoji:"🥣",name:"晚间 · 希腊酸奶",amount:"150g",how:"按食欲安排，不必紧接晚饭。"},
-  {emoji:"🫐",name:"蓝莓",amount:"80～100g",how:"搭配酸奶，按产品食用说明处理。"}
-];
-
-const staple=()=>({
-  emoji:"🌽",name:"晚餐主食 · 三选一",amount:"米饭150g / 面包60g / 玉米1根",
-  how:"按当天食欲选择一种；南瓜可以穿插蒸，但不默认完全替代主食。"
-});
-
-const DEFAULT_PLAN=[
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🐔",name:"煎鸡里脊",amount:"150g",how:"锅刷少量油，中小火煎，中途翻面；厚处切开检查，内部熟透。已调味，不另腌。"},
-    {emoji:"🥦",name:"西兰花",amount:"150g",how:"与胡萝卜分段放入蒸锅。"},
-    {emoji:"🥕",name:"胡萝卜",amount:"100g",how:"切薄片先蒸约5分钟，加入西兰花再蒸5～7分钟。"},staple()
-  ],snack:snackItems()},
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🐔",name:"煎鸡里脊",amount:"100g",how:"锅刷少量油，中小火煎熟。"},
-    {emoji:"🍅",name:"番茄豆腐",amount:"番茄150g＋北豆腐150g",how:"番茄加少量水煮软，放入豆腐煮5～8分钟，少量盐调味。"},
-    {emoji:"🥬",name:"紫甘蓝",amount:"100g",how:"切丝，沸水煮1～2分钟，捞出沥水，加少量醋。"},staple()
-  ],snack:snackItems()},
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🐟",name:"煎三文鱼",amount:"150g",how:"擦干表面，锅少刷油；带皮先煎皮面，中小火翻面煎，厚块可加盖焖至中心熟透。"},
-    {emoji:"🥦",name:"西兰花",amount:"150g",how:"先蒸5分钟，再加入彩椒。"},
-    {emoji:"🫑",name:"彩椒",amount:"100g",how:"与已蒸5分钟的西兰花再一起蒸3～5分钟。"},staple()
-  ],snack:snackItems()},
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🐔",name:"煎鸡里脊",amount:"150g",how:"同周一，出锅后可加少量黑胡椒换口味。"},
-    {emoji:"🥕",name:"胡萝卜",amount:"100g",how:"切薄片蒸8～12分钟。"},
-    {emoji:"🥬",name:"紫甘蓝",amount:"100g",how:"切丝，单独煮1～2分钟。"},staple()
-  ],snack:snackItems()},
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🍤",name:"虾仁豆腐煲",amount:"虾仁150g＋北豆腐150g",how:"少量油炒香姜片，加一小碗水；放豆腐煮5分钟，再加虾仁煮熟，少量盐或生抽调味。"},
-    {emoji:"🥬",name:"小青菜",amount:"200g",how:"洗净切段，虾仁接近熟时加入同一锅，一起煮熟。"},staple()
-  ],snack:snackItems()},
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🐔",name:"煎鸡里脊",amount:"150g",how:"同周一，不做炒饭。"},
-    {emoji:"🥦",name:"西兰花",amount:"150g",how:"先蒸5分钟，再加入彩椒。"},
-    {emoji:"🫑",name:"彩椒",amount:"100g",how:"与西兰花再蒸3～5分钟，蒸熟后加少量生抽或醋调味。"},staple()
-  ],snack:snackItems()},
-  {lunch:lunchItems(),dinner:[
-    {emoji:"🍅",name:"番茄鸡蛋烩豆腐",amount:"鸡蛋2个＋北豆腐200g＋番茄150g",how:"少油炒蛋盛出；番茄加水煮软，加入豆腐煮5～8分钟，放回鸡蛋煮透。"},
-    {emoji:"🥬",name:"小青菜",amount:"100g",how:"沸水煮熟，捞出沥水。"},staple()
-  ],snack:snackItems()}
-];
-
-const MEAL_META={
-  lunch:{title:"午餐",subtitle:"训练后",icon:"☀️"},
-  dinner:{title:"晚餐",subtitle:"当天轮换",icon:"🌙"},
-  snack:{title:"加餐",subtitle:"按饥饿程度选择",icon:"🍎",optional:true}
-};
-let activeDay=todayIndex();
-let editingMeal=null;
-let draftItems=[];
-
-function todayIndex(){return(new Date().getDay()+6)%7;}
-function clone(value){return JSON.parse(JSON.stringify(value));}
-function esc(value){return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));}
-function loadCustomPlan(){
-  try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));return saved&&typeof saved==="object"?saved:{};}catch(_){return{};}
-}
-function saveCustomPlan(custom){localStorage.setItem(STORAGE_KEY,JSON.stringify(custom));}
-function getMeal(day,meal){const custom=loadCustomPlan();return clone(custom[day]?.[meal]||DEFAULT_PLAN[day][meal]);}
-function dateText(){const now=new Date();return`${now.getMonth()+1}月${now.getDate()}日 · 星期${"日一二三四五六"[now.getDay()]}`;}
-
-function renderMealCard(meal){
-  const meta=MEAL_META[meal];
-  const items=getMeal(activeDay,meal);
-  const rows=items.length?items.map(item=>`
-    <div class="food-item">
-      <div class="food-main">
-        <span class="food-emoji">${esc(item.emoji||"🍽️")}</span>
-        <span class="food-name">${esc(item.name)}</span>
-        <span class="food-amount">${esc(item.amount)}</span>
-      </div>
-      ${item.how?`<div class="food-how">${esc(item.how)}</div>`:""}
-    </div>`).join(""):`<div class="empty-card">还没有内容，点编辑添加。</div>`;
-  return`<section class="meal-card ${meta.optional?"optional":""}">
-    <div class="card-head">
-      <span class="meal-icon">${meta.icon}</span>
-      <div><div class="card-title">${meta.title}</div><div class="card-subtitle">${meta.subtitle}</div></div>
-      <button class="edit-button" type="button" onclick="openEditor('${meal}')" aria-label="编辑${meta.title}">编辑</button>
-    </div>
-    <div class="food-list">${rows}</div>
-  </section>`;
-}
-
-function renderHome(){
-  const today=todayIndex();
-  document.getElementById("app").innerHTML=`
-    <header class="topbar">
-      <div><h1>${activeDay===today?"今天吃什么":WEEKDAYS[activeDay]+"吃什么"}</h1>
-      <div class="date">${activeDay===today?dateText():"查看一周循环菜单"}</div></div>
-      ${activeDay!==today?`<button class="today-button" type="button" onclick="goToday()">回到今天</button>`:""}
-    </header>
-    <nav class="week-strip" aria-label="选择星期">
-      ${WEEKDAYS.map((day,index)=>`<button class="day-button ${index===activeDay?"active":""} ${index===today?"is-today":""}"
-        type="button" onclick="selectDay(${index})" aria-current="${index===activeDay?"date":"false"}">
-        ${day.replace("周","")}<span>${index===today?"今天":""}</span></button>`).join("")}
-    </nav>
-    ${renderMealCard("lunch")}${renderMealCard("dinner")}${renderMealCard("snack")}`;
-  window.scrollTo(0,0);
-}
-
-function renderEditor(){
-  const meta=MEAL_META[editingMeal];
-  document.getElementById("app").innerHTML=`
-    <div class="edit-page">
-      <header class="edit-topbar">
-        <button class="back-button" type="button" onclick="cancelEdit()" aria-label="返回">‹</button>
-        <div><div class="edit-heading">编辑${WEEKDAYS[activeDay]}${meta.title}</div>
-        <div class="edit-help">名称、分量和下方小字做法都可以修改</div></div>
-      </header>
-      <div id="edit-list">${draftItems.map((item,index)=>renderEditItem(item,index)).join("")}</div>
-      <button class="add-button" type="button" onclick="addItem()">＋ 添加一种食物</button>
-      <button class="reset-button" type="button" onclick="resetMeal()">恢复这张卡片的默认内容</button>
-    </div>
-    <div class="save-bar"><button class="save-button" type="button" onclick="saveEditor()">保存到这台 iPhone</button></div>`;
-  window.scrollTo(0,0);
-}
-
-function renderEditItem(item,index){return`
-  <div class="edit-item" data-index="${index}">
-    <div class="edit-row">
-      <input class="emoji-input" value="${esc(item.emoji||"🍽️")}" aria-label="图标">
-      <input class="name-input" value="${esc(item.name)}" placeholder="食物名称" aria-label="食物名称">
-      <input class="amount-input" value="${esc(item.amount)}" placeholder="分量" aria-label="分量">
-      <button class="delete-button" type="button" onclick="deleteItem(${index})" aria-label="删除">×</button>
-    </div>
-    <textarea class="how-input" placeholder="做法或提醒（选填）" aria-label="做法或提醒">${esc(item.how||"")}</textarea>
-  </div>`;}
-
-function readDraftFromForm(){return Array.from(document.querySelectorAll(".edit-item")).map(card=>({
-  emoji:card.querySelector(".emoji-input").value.trim()||"🍽️",
-  name:card.querySelector(".name-input").value.trim(),
-  amount:card.querySelector(".amount-input").value.trim(),
-  how:card.querySelector(".how-input").value.trim()
-})).filter(item=>item.name);}
-
-function selectDay(index){activeDay=index;renderHome();}
-function goToday(){activeDay=todayIndex();renderHome();}
-function openEditor(meal){editingMeal=meal;draftItems=getMeal(activeDay,meal);renderEditor();}
-function cancelEdit(){editingMeal=null;draftItems=[];renderHome();}
-function addItem(){
-  draftItems=readDraftFromForm();draftItems.push({emoji:"🍽️",name:"",amount:"",how:""});renderEditor();
-  const names=document.querySelectorAll(".name-input");names[names.length-1]?.focus();
-}
-function deleteItem(index){draftItems=readDraftFromForm();draftItems.splice(index,1);renderEditor();}
-function saveEditor(){
-  const items=readDraftFromForm();const custom=loadCustomPlan();custom[activeDay]=custom[activeDay]||{};
-  custom[activeDay][editingMeal]=items;saveCustomPlan(custom);const title=MEAL_META[editingMeal].title;
-  editingMeal=null;draftItems=[];renderHome();showToast(`${WEEKDAYS[activeDay]}${title}已保存`);
-}
-function resetMeal(){
-  const title=MEAL_META[editingMeal].title;
-  if(!confirm(`恢复${WEEKDAYS[activeDay]}${title}的默认内容？`))return;
-  const custom=loadCustomPlan();
-  if(custom[activeDay]){delete custom[activeDay][editingMeal];if(Object.keys(custom[activeDay]).length===0)delete custom[activeDay];}
-  saveCustomPlan(custom);draftItems=clone(DEFAULT_PLAN[activeDay][editingMeal]);renderEditor();showToast("已恢复默认内容");
-}
-let toastTimer;
-function showToast(message){
-  const toast=document.getElementById("toast");toast.textContent=message;toast.classList.add("show");
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);
-}
-
-renderHome();
-if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
-</script>
 </body>
 </html>
