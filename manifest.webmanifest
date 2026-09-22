@@ -1,12 +1,12 @@
 {
-  "name": "晚餐",
-  "short_name": "晚餐",
+  "name": "每日饭单",
+  "short_name": "饭单",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F5FAF0",
-  "theme_color": "#6BB572",
+  "background_color": "#EEF4E8",
+  "theme_color": "#355D43",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
