@@ -143,11 +143,17 @@ function renderMealCard(meal) {
   const steps = [data.steps, finish].filter(Boolean).join("\n");
   return `<section class="meal-card ${meal === "snack" ? "snack-card" : ""}" aria-label="${meta.title}">
     <div class="card-head"><span class="meal-icon" aria-hidden="true">${meta.icon}</span><div class="head-copy"><h2>${meta.title}</h2><span class="card-subtitle">${meta.subtitle}</span></div><button class="edit-button" type="button" onclick="openEditor('${meal}')" aria-label="编辑${meta.title}">编辑</button>${activeDay === todayIndex() ? `<button class="done-button" type="button" onclick="setMealDone('${meal}',true)" aria-label="${meta.title}吃好了，收起">吃好了</button>` : ""}</div>
+    ${prep ? `<div class="prep-note">${esc(prep).replace(/(\d+(?:\.\d+)?g)/g, "<strong>$1</strong>")}</div>` : ""}
     <div class="food-list">${renderFoods(data.items)}</div>
-    ${steps ? `<p class="meal-steps">${esc(steps)}</p>` : ""}
-    ${prep ? `<div class="prep-note">${esc(prep)}</div>` : ""}
+    ${renderSteps(steps)}
     ${meal === "dinner" && data.evening?.length ? `<div class="evening"><span class="evening-label">晚间加餐 · 饿了再吃</span><div class="food-list">${renderFoods(data.evening)}</div></div>` : ""}
   </section>`;
+}
+function renderSteps(steps) {
+  const lines = steps.split(/\n+|(?=[①-⑳])/u).map(line => line.replace(/^[①-⑳]\s*/u, "").trim()).filter(Boolean);
+  if (!lines.length) return "";
+  if (lines.length === 1) return `<p class="meal-steps">${esc(lines[0])}</p>`;
+  return `<ol class="meal-steps">${lines.map(line => `<li>${esc(line)}</li>`).join("")}</ol>`;
 }
 function renderHome() {
   const mealOrder = ["lunch", "snack", "dinner"];

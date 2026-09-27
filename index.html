@@ -12,7 +12,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>
-  :root { --ink:#234332; --muted:#66796C; --leaf:#355D43; --line:#DBE5D8; --paper:#FBFCF7; }
+  :root { --ink:#234332; --muted:#53665A; --leaf:#355D43; --line:#DBE5D8; --paper:#FBFCF7; }
   * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body { margin:0; min-height:100%; }
   body { font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif; color:var(--ink); background:#EEF4E8; }
@@ -22,39 +22,44 @@
   .app { width:min(100%,560px); margin:auto; padding:calc(env(safe-area-inset-top) + 14px) 14px calc(env(safe-area-inset-bottom) + 20px); }
   .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 2px 9px; }
   h1 { margin:0; font-size:25px; line-height:1.25; letter-spacing:-.6px; }
-  .date { margin-top:3px; color:var(--muted); font-size:12px; }
-  .today-button { min-height:44px; padding:0 10px; border:0; border-radius:12px; background:#E0EBDC; font-size:12px; }
+  .date { margin-top:5px; color:var(--muted); font-size:15px; }
+  .today-button { min-height:44px; padding:0 10px; border:0; border-radius:12px; background:#E0EBDC; font-size:15px; }
   .week-strip { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:10px; }
-  .day-button { min-width:0; min-height:44px; padding:5px 0; border:0; border-radius:12px; background:transparent; color:var(--muted); font-size:13px; }
-  .day-button span { display:block; font-size:9px; line-height:12px; }
+  .day-button { min-width:0; min-height:48px; padding:6px 0; border:0; border-radius:12px; background:transparent; color:var(--muted); font-size:17px; }
+  .day-button span { display:block; font-size:12px; line-height:16px; }
   .day-button.active { background:var(--leaf); color:white; font-weight:700; }
-  .meal-card { margin-bottom:10px; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--paper); box-shadow:0 3px 14px rgba(50,80,58,.035); }
-  .card-head { display:flex; align-items:center; gap:8px; padding:5px 12px 0; }
-  .meal-icon { display:grid; width:28px; height:28px; place-items:center; border-radius:10px; background:#E7EFE2; font-size:16px; }
-  h2 { display:inline; margin:0; font-size:16px; }
-  .card-subtitle { margin-left:7px; font-size:11px; color:var(--muted); }
+  .meal-card { margin-bottom:16px; overflow:hidden; border:1px solid var(--line); border-radius:18px; background:var(--paper); box-shadow:0 3px 14px rgba(50,80,58,.035); }
+  .card-head { display:flex; align-items:center; gap:8px; padding:16px 14px 12px; }
+  .meal-icon { display:grid; flex-shrink:0; width:34px; height:34px; place-items:center; border-radius:10px; background:#E7EFE2; font-size:20px; }
+  h2 { display:block; margin:0; font-size:22px; line-height:1.35; }
+  .card-subtitle { display:block; margin-top:3px; font-size:14px; color:var(--muted); }
   .head-copy { flex:1; min-width:0; }
-  .edit-button { width:44px; height:44px; margin-left:auto; border:0; background:transparent; color:var(--muted); font-size:12px; }
-  .done-button { flex-shrink:0; min-width:52px; min-height:44px; padding:0 4px; border:0; background:transparent; color:var(--leaf); font-size:12px; font-weight:650; }
-  .done-button:active { background:#E4EDDF; border-radius:10px; }
-  .completed-meals { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin:3px 2px; color:var(--muted); font-size:11px; }
-  .restore-button { min-height:44px; padding:0 9px; border:0; background:transparent; color:var(--leaf); font-size:12px; text-decoration:underline; text-underline-offset:3px; }
+  .edit-button { flex-shrink:0; width:44px; height:44px; margin-left:auto; border:0; background:transparent; color:var(--muted); font-size:14px; }
+  .done-button { flex-shrink:0; min-width:76px; min-height:46px; padding:0 12px; border:0; border-radius:12px; background:var(--leaf); color:white; font-size:16px; font-weight:650; }
+  .done-button:active { background:#234332; }
+  .completed-meals { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin:3px 2px; color:var(--muted); font-size:14px; }
+  .restore-button { min-height:44px; padding:0 9px; border:0; background:transparent; color:var(--leaf); font-size:15px; text-decoration:underline; text-underline-offset:3px; }
   .day-finished { padding:34px 12px 24px; text-align:center; }
   .day-finished strong { display:block; margin-bottom:8px; font-size:18px; }
-  .day-finished p { margin:0; color:var(--muted); font-size:12px; }
-  .food-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px 16px; padding:2px 14px 9px; }
-  .food-item { display:flex; justify-content:space-between; align-items:baseline; gap:5px; min-width:0; line-height:1.4; }
-  .food-name { min-width:0; font-size:13px; overflow-wrap:anywhere; }
-  .food-amount { max-width:55%; flex-shrink:0; font-size:12px; font-weight:650; overflow-wrap:anywhere; text-align:right; }
-  .meal-steps { margin:0 14px 11px; padding-top:8px; border-top:1px solid var(--line); color:var(--muted); font-size:11.5px; line-height:1.65; white-space:pre-line; overflow-wrap:anywhere; }
-  .prep-note { margin:0 12px 10px; padding:8px 10px; background:#E8F0E2; border-radius:10px; color:var(--leaf); font-size:12px; line-height:1.5; overflow-wrap:anywhere; }
-  .evening { margin:0 14px 11px; padding-top:8px; border-top:1px solid var(--line); }
-  .evening-label { display:block; margin-bottom:5px; color:var(--muted); font-size:11px; }
+  .day-finished p { margin:0; color:var(--muted); font-size:16px; }
+  .food-list { display:grid; grid-template-columns:minmax(0,1fr); padding:0 16px 12px; }
+  .food-item { display:flex; justify-content:space-between; align-items:baseline; gap:14px; min-width:0; min-height:44px; padding:9px 0; line-height:1.5; }
+  .food-item + .food-item { border-top:1px solid #E9EEE5; }
+  .food-name { min-width:0; font-size:18px; font-weight:500; overflow-wrap:anywhere; }
+  .food-amount { max-width:55%; flex-shrink:0; font-size:18px; font-weight:750; overflow-wrap:anywhere; text-align:right; font-variant-numeric:tabular-nums; }
+  .meal-steps { margin:0 16px 18px; padding:14px 0 0; border-top:1px solid var(--line); color:var(--muted); font-size:16px; line-height:1.75; overflow-wrap:anywhere; }
+  ol.meal-steps { list-style:none; counter-reset:step; }
+  .meal-steps li { position:relative; padding-left:28px; counter-increment:step; }
+  .meal-steps li + li { margin-top:10px; }
+  .meal-steps li::before { content:counter(step) "."; position:absolute; left:0; color:var(--leaf); font-weight:700; }
+  .prep-note { margin:0 14px 12px; padding:12px 14px; border-left:3px solid #91AB7B; background:#E8F0E2; border-radius:10px; color:var(--leaf); font-size:16px; line-height:1.7; overflow-wrap:anywhere; }
+  .evening { margin:0 16px 18px; padding-top:14px; border-top:1px solid var(--line); }
+  .evening-label { display:block; margin-bottom:6px; color:var(--muted); font-size:16px; }
   .evening .food-list { padding:0; }
   .snack-card { background:#F9FAF3; }
   .snack-card .meal-icon { background:#F4EBDD; }
-  .empty-card { grid-column:1/-1; color:var(--muted); font-size:12px; }
-  .weight-note { margin:7px 3px 0; color:var(--muted); font-size:10px; line-height:1.5; }
+  .empty-card { grid-column:1/-1; color:var(--muted); font-size:16px; }
+  .weight-note { margin:10px 3px 0; color:var(--muted); font-size:13px; line-height:1.6; }
   .edit-page { padding-bottom:90px; }
   .edit-topbar { display:flex; align-items:center; gap:10px; margin-bottom:15px; }
   .back-button { flex-shrink:0; width:44px; height:44px; border:0; border-radius:12px; background:var(--paper); font-size:25px; }
@@ -73,7 +78,7 @@
   .save-button { display:block; width:min(100%,532px); min-height:48px; margin:auto; border:0; border-radius:13px; background:var(--leaf); color:white; font-weight:650; }
   .toast { position:fixed; bottom:calc(env(safe-area-inset-bottom) + 76px); left:50%; z-index:10; max-width:90%; width:max-content; padding:10px 14px; border-radius:12px; background:#234332; color:white; font-size:13px; opacity:0; pointer-events:none; transform:translateX(-50%); transition:opacity .15s; }
   .toast.show { opacity:1; }
-  @media (max-width:360px) { .app { padding-left:10px; padding-right:10px; } .food-list { gap:7px 12px; } .edit-item { grid-template-columns:minmax(0,1fr) 80px 44px; } }
+  @media (max-width:360px) { .app { padding-left:10px; padding-right:10px; } .card-head { gap:6px; padding-left:12px; padding-right:12px; } .meal-icon { display:none; } .edit-item { grid-template-columns:minmax(0,1fr) 80px 44px; } }
 </style>
 <script src="plan-migration.js" defer></script>
 <script src="app.js" defer></script>

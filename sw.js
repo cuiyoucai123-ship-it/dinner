@@ -1,4 +1,4 @@
-const CACHE = "dinner-v4";
+const CACHE = "dinner-v5";
 const ASSETS = [
   "./",
   "./index.html",
