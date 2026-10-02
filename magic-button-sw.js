@@ -1,10 +1,12 @@
 // The scope is exactly ./magic-button.html, so dinner keeps its own worker.
-const CACHE = 'magic-button-github-v1';
+const CACHE = 'magic-button-github-v2';
 const ASSETS = [
   './magic-button.html',
   './magic-button-assets/manifest.webmanifest',
-  './magic-button-assets/icon-192.png',
-  './magic-button-assets/icon-512.png'
+  './magic-button-assets/magic-icon-v2-64.png',
+  './magic-button-assets/magic-icon-v2-180.png',
+  './magic-button-assets/magic-icon-v2-192.png',
+  './magic-button-assets/magic-icon-v2-512.png'
 ];
 const urls = new Set(ASSETS.map(path => new URL(path, self.location.href).pathname));
 self.addEventListener('install', event => {
