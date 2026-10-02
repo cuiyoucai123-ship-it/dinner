@@ -1,5 +1,5 @@
 // The scope is exactly ./magic-button.html, so dinner keeps its own worker.
-const CACHE = 'magic-button-github-v3';
+const CACHE = 'magic-button-github-v4';
 const ASSETS = [
   './magic-button.html',
   './magic-button-assets/manifest.webmanifest',
