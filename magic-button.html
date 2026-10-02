@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8fa"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="给每个科目一点时间。用大小和颜色，看见最近七天被冷落的学习。">
+  <title>神奇按钮</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23f7f8fa'/%3E%3Crect x='9' y='9' width='28' height='46' rx='11' fill='%23ff746a'/%3E%3Crect x='41' y='9' width='14' height='21' rx='7' fill='%23f4c75e'/%3E%3Crect x='41' y='34' width='14' height='21' rx='7' fill='%238cd8a2'/%3E%3C/svg%3E">
+  <link rel="manifest" href="./magic-button-assets/manifest.webmanifest"><link rel="apple-touch-icon" href="./magic-button-assets/icon-192.png">
+  <style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:#22252b;background:#f7f8fa;font-synthesis:none;font-weight:450;-webkit-font-smoothing:antialiased;color-scheme:light}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #344e74;outline-offset:4px}button{border:0}button,summary{touch-action:manipulation}[hidden]{display:none!important}
+.app{max-width:560px;margin:0 auto;padding:calc(25px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));min-height:100svh;display:flex;flex-direction:column}
+.header{display:flex;align-items:center;justify-content:space-between;margin:0 7px 25px;gap:12px;height:44px;flex:none}.brand{display:flex;gap:10px;align-items:center}h1{font-size:21px;font-weight:700;letter-spacing:-.7px;margin:0}.brand-mark{width:25px;height:25px;display:grid;grid-template-columns:13px 8px;grid-template-rows:11px 10px;gap:3px;transform:rotate(-7deg)}.brand-mark i{background:#30343d;border-radius:5px}.brand-mark i:first-child{grid-row:span 2}.brand-mark i:last-child{background:#aab0bc}.demo-badge{font-size:11px;font-weight:500;color:#767d89;border:1px solid #dce0e6;border-radius:6px;padding:3px 5px}nav{display:flex;align-items:center;gap:8px}.icon-button{width:42px;height:42px;border-radius:50%;background:#e9ecf0;display:grid;place-items:center;color:#454b56}.icon-button svg{width:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}.edit-button{background:none;color:#717785;padding:12px 5px;min-width:42px;font-size:14px}.edit-button.active{color:#22252b;font-weight:650}
+.board{position:relative;flex:1;min-height:420px;height:calc(100svh - 164px);isolation:isolate}.subject{position:absolute;padding:7px;background:transparent;text-align:center;transition:left .7s cubic-bezier(.22,1,.36,1),top .7s cubic-bezier(.22,1,.36,1),width .7s cubic-bezier(.22,1,.36,1),height .7s cubic-bezier(.22,1,.36,1);color:#29342d}.tile{width:100%;height:100%;position:relative;border-radius:30px;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;background:var(--color);box-shadow:inset 0 1px 0 #ffffff50,inset 0 -2px 0 #00000004;transition:background .75s,transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .3s;transform:translateZ(0)}.tile:before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 15% 0%,#ffffff28,transparent 65%);pointer-events:none}.subject:hover .tile{transform:translateY(-2px);box-shadow:inset 0 1px 0 #ffffff50,0 8px 18px #28302509}.subject:active .tile{transform:scale(.945)}.subject-name{position:relative;font-size:var(--font,24px);font-weight:650;line-height:1.4;letter-spacing:-.6px;overflow-wrap:anywhere;text-wrap:balance;max-width:100%;transition:font-size .65s}.editing .subject .tile:after{content:"✎";position:absolute;right:13px;top:9px;font-size:20px;opacity:.55}.editing .tile{outline:1px dashed #353a3d40;outline-offset:-7px}.board.empty{display:grid;place-items:center}.empty-content{text-align:center;color:#9297a1;font-size:15px;line-height:1.8}.empty-content button{display:block;margin:18px auto;background:#242831;color:white;border-radius:15px;padding:12px 20px}
+.footer{display:flex;align-items:center;justify-content:space-between;min-height:54px;padding:8px 9px 0;gap:8px;flex:none}.footer-text{font-size:12px;color:#9399a5;letter-spacing:.2px}.quiet-button{font-size:12px;color:#848b98;padding:12px 0 12px 12px;background:none}.quiet-button.start{font-size:13px;color:#383f4b;font-weight:650}.toast{position:fixed;bottom:calc(32px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:20;background:#272c34;color:#fff;box-shadow:0 8px 25px #0002;padding:14px 17px;border-radius:18px;display:flex;gap:22px;align-items:center;font-size:14px;max-width:calc(100vw - 32px);width:max-content}.toast button{background:none;color:#cadacf;font-size:14px;font-weight:600;padding:4px;white-space:nowrap}.toast span{line-height:1.5}
+dialog{border:0;border-radius:28px;padding:27px;width:calc(100% - 32px);max-width:420px;color:#292e37;background:#fff;box-shadow:0 30px 90px #151f3430}dialog::backdrop{background:#1e273052;backdrop-filter:blur(5px)}.sheet-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:28px}h2{font-size:21px;letter-spacing:-.5px;margin:0;font-weight:650}.close-button{font-size:26px;background:#f0f2f5;color:#858c98;border-radius:50%;width:34px;height:34px;line-height:1;flex:none}label{font-size:13px;color:#838a96;display:block;margin-bottom:10px}input{width:100%;border:1px solid #e5e8ed;border-radius:14px;background:#f7f8fa;padding:16px;font-size:17px;color:#303640}input::placeholder{color:#a1a7b2}.field-error{font-size:13px;color:#c95751;min-height:18px}.sheet-actions{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin-top:25px}.primary-button,.danger-button{background:#292f3b;color:#fff;border-radius:14px;padding:14px 26px;min-width:100px}.delete-button{margin-right:auto;background:none;color:#ba625d;font-size:14px;padding:12px 0}.danger-button{background:#ce6259}.secondary-button{padding:13px 20px;background:#f0f2f5;border-radius:14px;color:#5c6574}.help-copy{font-size:15px;line-height:1.9;color:#68717e}.help-copy p{margin:0 0 20px}.help-copy .muted{font-size:13px;color:#9299a4}.color-key{display:flex;align-items:center;gap:12px;font-size:12px;margin:25px 0 30px;color:#8b929d}.color-key i{height:6px;flex:1;border-radius:3px;background:linear-gradient(90deg,#96d9aa,#e7d978,#ff8171)}details{font-size:14px;margin-bottom:24px}details p{margin-top:12px!important}summary{cursor:pointer;color:#5d6777}#tryDemo{width:100%}
+@media(min-width:700px){.app{margin:26px auto;min-height:0;height:min(900px,calc(100svh - 52px));padding:24px 24px 13px;background:#fff;border-radius:42px;box-shadow:0 25px 100px #232f4910;border:1px solid #edf0f4}.header{margin-bottom:22px}.board{height:auto;min-height:390px}.footer{padding-top:10px}.tile{border-radius:34px}body{background:radial-gradient(ellipse at 20% 10%,#eef1f5,transparent 55%),#f5f6f8}}
+@media(max-width:370px){.app{padding-left:10px;padding-right:10px}.subject{padding:5px}.tile{border-radius:24px;padding:10px}.header{margin-bottom:17px}h1{font-size:19px}.brand{gap:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+</style><script type="module">
+function dayKey(date=new Date()) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
+function days(now=new Date()) { return Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(d.getDate()-i);return dayKey(d);}); }
+function priority(records,now=new Date()) {
+  const week=days(now); let count=0,recency=0;
+  week.forEach((day,i)=>{if(records.includes(day)){count++;recency+=7-i;}});
+  return 1-(count+recency/56)/7.5;
+}
+function shares(weights) {
+  const n=weights.length;if(!n)return [];
+  const total=Math.min(1,n/3),floor=Math.min(.045,total/n),cap=1/3;
+  let result=Array(n).fill(floor),remaining=total-floor*n,active=weights.map((_,i)=>i);
+  while(remaining>1e-9&&active.length){
+    const sum=active.reduce((s,i)=>s+weights[i],0),over=active.filter(i=>result[i]+remaining*weights[i]/sum>cap);
+    if(!over.length){active.forEach(i=>{result[i]+=remaining*weights[i]/sum;});break;}
+    for(const i of over){remaining-=cap-result[i];result[i]=cap;}active=active.filter(i=>!over.includes(i));
+  }
+  return result;
+}
+function layout(items,x,y,w,h,result=[]) {
+  if(!items.length)return result;
+  if(items.length===1){result.push({...items[0],x,y,w,h});return result;}
+  const middle=Math.ceil(items.length/2),a=items.slice(0,middle),b=items.slice(middle);
+  const sum=list=>list.reduce((s,i)=>s+i.area,0),fraction=sum(a)/sum(items);
+  if(w>h){layout(a,x,y,w*fraction,h,result);layout(b,x+w*fraction,y,w*(1-fraction),h,result);}
+  else {layout(a,x,y,w,h*fraction,result);layout(b,x,y+h*fraction,w,h*(1-fraction),result);}
+  return result;
+}
+
+const $=id=>document.getElementById(id),KEY='magic-study:v1';
+const names=['专业课','高等数学','英语阅读','思想政治','线性代数','概率统计','英语单词','英语写作','专业练习'];
+const fresh=()=>({version:1,started:false,subjects:names.map((name,i)=>({id:`subject-${i}`,name,records:[]}))});
+const valid=s=>s&&s.version===1&&Array.isArray(s.subjects)&&s.subjects.every(x=>typeof x.id==='string'&&typeof x.name==='string'&&Array.isArray(x.records)&&x.records.every(d=>/^\d{4}-\d{2}-\d{2}$/.test(d)));
+let state=fresh(),storageProblem=false;
+try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(valid(parsed))state=parsed;else storageProblem=true;}}catch{storageProblem=true;}
+let demo=!state.started,editing=false,editingId=null,toastTimer,undoAction=null,today=dayKey(),midnightTimer;
+function sample(){const week=days();const offsets=[[],[2],[1,3],[1,2,4],[1,2,3,5],[1,2,3,4],[1,2,3,4,5,6],[1,2,3,4,5],[2,3,4,5]];return names.map((name,i)=>({id:`demo-${i}`,name,records:offsets[i].map(d=>week[d])}));}
+let demoSubjects=sample();
+const subjects=()=>demo?demoSubjects:state.subjects;
+function notify(text,action=null){clearTimeout(toastTimer);undoAction=action;$('toastText').textContent=text;$('undo').hidden=!action;$('toast').hidden=false;toastTimer=setTimeout(()=>{$('toast').hidden=true;undoAction=null;},action?6500:4000);}
+function commit(next){try{localStorage.setItem(KEY,JSON.stringify(next));state=next;return true;}catch{notify('暂时无法保存，请检查浏览器的存储设置。');return false;}}
+function updateSubjects(next){if(demo){demoSubjects=next;return true;}return commit({...state,subjects:next});}
+function color(p){const stops=[[145,215,171],[243,216,127],[255,126,114]];const t=Math.min(1,Math.max(0,p))*2,k=Math.min(1,Math.floor(t)),f=t-k;return `rgb(${stops[k].map((v,i)=>Math.round(v+(stops[k+1][i]-v)*f)).join(',')})`;}
+function render(){
+  const list=subjects(),board=$('board');board.classList.toggle('editing',editing);board.classList.toggle('empty',!list.length);
+  $('edit').textContent=editing?'完成':'编辑';$('edit').classList.toggle('active',editing);$('demoBadge').hidden=!demo;
+  $('footerText').textContent=editing?'点科目，修改名称或删除。':demo?'示例记录 · 先点点看':'学完，轻轻点一下。';
+  $('footerAction').textContent=demo?'开始记录':'怎么用';$('footerAction').classList.toggle('start',demo);
+  if(!list.length){board.replaceChildren();const box=document.createElement('div');box.className='empty-content';box.textContent='从一个科目开始。';const add=document.createElement('button');add.textContent='添加科目';add.onclick=()=>openSubject();box.append(add);board.append(box);return;}
+  board.querySelector('.empty-content')?.remove();
+  const validIds=new Set(list.map(s=>s.id));board.querySelectorAll('.subject').forEach(el=>{if(!validIds.has(el.dataset.id))el.remove();});
+  const weights=list.map(s=>Math.exp(priority(s.records)*3.4)),areas=shares(weights),sum=areas.reduce((s,v)=>s+v,0);
+  const width=board.clientWidth,height=Math.max(board.clientHeight,Math.ceil(list.length/3)*90);
+  board.style.minHeight=`${Math.max(420,Math.ceil(list.length/3)*90)}px`;
+  const rects=layout(list.map((s,i)=>({...s,area:areas[i]})),0,0,width,height*sum);
+  const min=Math.min(...areas),max=Math.max(...areas);
+  rects.forEach(item=>{
+    let button=Array.from(board.children).find(el=>el.dataset.id===item.id);
+    if(!button){button=document.createElement('button');button.className='subject';button.dataset.id=item.id;const tile=document.createElement('span');tile.className='tile';const name=document.createElement('span');name.className='subject-name';tile.append(name);button.append(tile);button.onclick=()=>editing?openSubject(item.id):record(item.id);board.append(button);}
+    const p=max-min<.00001?.5:(item.area-min)/(max-min);
+    button.style.left=`${item.x}px`;button.style.top=`${item.y}px`;button.style.width=`${item.w}px`;button.style.height=`${item.h}px`;button.style.setProperty('--color',color(p));
+    const shortSide=Math.min(item.w,item.h),font=Math.max(14,Math.min(34,shortSide*.19,(item.w-38)/Math.min(item.name.length,5)));
+    button.style.setProperty('--font',`${font}px`);button.querySelector('.subject-name').textContent=item.name;button.setAttribute('aria-label',`${item.name}，${editing?'编辑科目':'记录一次学习'}`);
+  });
+}
+function record(id){
+  const list=subjects(),subject=list.find(s=>s.id===id);if(!subject)return false;
+  const date=dayKey();
+  if(subject.records.includes(date)){notify('这次已经记下了。',()=>unrecord(id,date));return false;}
+  const week=days(),next=list.map(s=>s.id===id?{...s,records:[...s.records.filter(d=>week.includes(d)),date]}:s);
+  if(!updateSubjects(next))return false;render();navigator.vibrate?.(12);notify('记下一点进步。',()=>unrecord(id,date));return true;
+}
+function unrecord(id,date){const next=subjects().map(s=>s.id===id?{...s,records:s.records.filter(d=>d!==date)}:s);if(updateSubjects(next)){render();notify('已撤销。');}}
+function start(){const next=state.started?state:{...state,subjects:demoSubjects.map(s=>({id:crypto.randomUUID(),name:s.name,records:[]}))};if(!commit({...next,started:true}))return;demo=false;editing=false;clearToast();render();}
+function clearToast(){clearTimeout(toastTimer);$('toast').hidden=true;undoAction=null;}
+function openSubject(id=null){editingId=id;const subject=subjects().find(s=>s.id===id);$('dialogTitle').textContent=id?'编辑科目':'添加科目';$('subjectName').value=subject?.name||'';$('deleteSubject').hidden=!id;$('fieldError').textContent='';$('subjectDialog').showModal();setTimeout(()=>$('subjectName').focus(),80);}
+$('add').onclick=()=>openSubject();$('edit').onclick=()=>{editing=!editing;render();};
+$('footerAction').onclick=()=>demo?start():$('helpDialog').showModal();
+$('tryDemo').onclick=()=>{demo=true;demoSubjects=sample();editing=false;clearToast();$('helpDialog').close();render();};
+$('undo').onclick=()=>{const action=undoAction;clearToast();action?.();};
+document.querySelectorAll('[data-close]').forEach(button=>button.onclick=()=>button.closest('dialog').close());
+document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}}));
+$('subjectForm').onsubmit=event=>{
+  event.preventDefault();const name=$('subjectName').value.trim();if(!name){$('fieldError').textContent='写下一个科目名称。';return;}
+  const list=subjects();if(list.some(s=>s.id!==editingId&&s.name===name)){$('fieldError').textContent='这个科目已经有了，换个名称吧。';return;}
+  const next=editingId?list.map(s=>s.id===editingId?{...s,name}:s):[...list,{id:crypto.randomUUID(),name,records:[]}];
+  if(updateSubjects(next)){$('subjectDialog').close();render();}
+};
+$('deleteSubject').onclick=()=>{const subject=subjects().find(s=>s.id===editingId);if(!subject)return;$('deleteCopy').textContent=`「${subject.name}」和它的学习记录会一起移除。`;$('subjectDialog').close();$('deleteDialog').showModal();};
+$('confirmDelete').onclick=()=>{const previous=subjects().map(s=>({...s,records:[...s.records]}));if(updateSubjects(subjects().filter(s=>s.id!==editingId))){$('deleteDialog').close();render();notify('科目已删除。',()=>{if(updateSubjects(previous)){render();notify('已恢复。');}});}};
+function refreshDay(){const next=dayKey();if(next!==today){today=next;clearToast();render();}clearTimeout(midnightTimer);const now=new Date(),tomorrow=new Date(now);tomorrow.setHours(24,0,0,50);midnightTimer=setTimeout(refreshDay,tomorrow-now);}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshDay();});window.addEventListener('focus',refreshDay);
+window.addEventListener('storage',event=>{if(event.key!==KEY)return;try{const next=event.newValue?JSON.parse(event.newValue):fresh();if(valid(next)){state=next;if(!demo)render();}}catch{}});
+new ResizeObserver(()=>render()).observe($('board'));render();refreshDay();
+if(storageProblem)notify('原来的记录暂时无法读取，请先保留浏览器数据。');
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./magic-button-sw.js',{scope:'./magic-button.html'}).catch(()=>{}));
+const context=document.modelContext;
+if(context?.registerTool){
+  const lifecycle=new AbortController();
+  const register=tool=>{try{Promise.resolve(context.registerTool(tool,{signal:lifecycle.signal})).catch(()=>{});}catch{}};
+  register({name:'list_study_subjects',description:'读取当前科目。demo 表示示例模式。',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>({demo,subjects:subjects().map(s=>({id:s.id,name:s.name,studyDays:days().filter(d=>s.records.includes(d)).length}))})});
+  register({name:'record_subject_study',description:'为当前科目记录今天的一次学习，每科每天一次。示例模式仅修改示例。',inputSchema:{type:'object',properties:{id:{type:'string'}},required:['id'],additionalProperties:false},annotations:{readOnlyHint:false},execute:input=>{if(!input||typeof input.id!=='string'||!subjects().some(s=>s.id===input.id))throw new Error('科目不存在');return {recorded:record(input.id),demo};}});
+  window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});
+}
+
+</script>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><h1>神奇按钮</h1><span class="demo-badge" id="demoBadge" hidden>体验</span></div>
+      <nav aria-label="科目管理"><button class="icon-button" id="add" aria-label="添加科目"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><button class="edit-button" id="edit">编辑</button></nav>
+    </header>
+    <section class="board" id="board" aria-label="学习科目"></section>
+    <footer class="footer"><div id="footerText" class="footer-text">学完，轻轻点一下。</div><button id="footerAction" class="quiet-button">怎么用</button></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden><span id="toastText"></span><button id="undo">撤销</button></div>
+  <dialog id="subjectDialog"><form id="subjectForm"><div class="sheet-top"><h2 id="dialogTitle">添加科目</h2><button class="close-button" type="button" data-close aria-label="关闭">×</button></div><label for="subjectName">科目名称</label><input id="subjectName" name="name" maxlength="24" required autocomplete="off" placeholder="例如：英语阅读"><p class="field-error" id="fieldError" role="alert"></p><div class="sheet-actions"><button id="deleteSubject" class="delete-button" type="button" hidden>删除科目</button><button class="primary-button" type="submit">保存</button></div></form></dialog>
+  <dialog id="helpDialog"><div class="sheet-top"><h2>给每个科目一点时间。</h2><button class="close-button" data-close aria-label="关闭">×</button></div><div class="help-copy"><p>学完一个科目，点一下对应按钮。最近七天学得越少，它就越大、越偏红；连续学习，它就慢慢缩小、变绿。</p><div class="color-key"><span>常常学</span><i></i><span>该看看了</span></div><p>每天每科记录一次，点错可以撤销。每天零点自动向前滚动，今天和前六天一起计算。</p><p class="muted">记录只保存在当前浏览器。清除浏览器数据会移除记录，换设备不会同步。</p><details><summary>放到手机主屏幕</summary><p>在手机浏览器打开本页，从分享或浏览器菜单选择「添加到主屏幕」。</p></details></div><button id="tryDemo" class="secondary-button">体验一周的变化</button></dialog>
+  <dialog id="deleteDialog"><div class="sheet-top"><h2>删除这个科目？</h2><button class="close-button" data-close aria-label="关闭">×</button></div><p class="help-copy" id="deleteCopy"></p><div class="sheet-actions"><button class="secondary-button" data-close>保留</button><button class="danger-button" id="confirmDelete">删除</button></div></dialog>
+  <noscript>请开启 JavaScript，以使用神奇按钮。</noscript>
+</body>
+</html>

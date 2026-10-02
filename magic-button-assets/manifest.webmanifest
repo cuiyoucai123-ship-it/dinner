@@ -1,0 +1,25 @@
+{
+  "name": "神奇按钮",
+  "short_name": "神奇按钮",
+  "lang": "zh-CN",
+  "start_url": "../magic-button.html",
+  "scope": "../magic-button.html",
+  "display": "standalone",
+  "background_color": "#f7f8fa",
+  "theme_color": "#f7f8fa",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "../magic-button.html"
+}
