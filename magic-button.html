@@ -79,11 +79,14 @@ function layout(items,x,y,w,h,result=[]) {
 }
 
 const $=id=>document.getElementById(id),KEY='magic-study:v1';
-const names=['专业课','高等数学','英语阅读','思想政治','线性代数','概率统计','英语单词','英语写作','专业练习'];
+const names=['英语作文','专业课背诵','专业课计算','肖1000','800题','逻辑','写作','英语真题','数学强化'];
+const oldDefaults=['专业课','高等数学','英语阅读','思想政治','线性代数','概率统计','英语单词','英语写作','专业练习'];
 const fresh=()=>({version:1,started:true,subjects:names.map((name,i)=>({id:`subject-${i}`,name,records:[]}))});
 const valid=s=>s&&s.version===1&&Array.isArray(s.subjects)&&s.subjects.every(x=>typeof x.id==='string'&&typeof x.name==='string'&&Array.isArray(x.records)&&x.records.every(d=>/^\d{4}-\d{2}-\d{2}$/.test(d)));
 let state=fresh(),storageProblem=false;
 try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);if(valid(parsed))state=parsed;else storageProblem=true;}}catch{storageProblem=true;}
+// Replace untouched empty defaults while retaining all edited subjects and recorded history.
+if(state.subjects.length===oldDefaults.length&&state.subjects.every((s,i)=>s.id===`subject-${i}`&&s.name===oldDefaults[i]&&s.records.length===0))state={...state,subjects:state.subjects.map((s,i)=>({...s,name:names[i]}))};
 let editing=false,editingId=null,toastTimer,undoAction=null,today=dayKey(),midnightTimer,historyId=null;
 const subjects=()=>state.subjects;
 function notify(text,action=null){clearTimeout(toastTimer);undoAction=action;$('toastText').textContent=text;$('undo').hidden=!action;$('toast').hidden=false;toastTimer=setTimeout(()=>{$('toast').hidden=true;undoAction=null;},action?6500:4000);}

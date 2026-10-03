@@ -138,3 +138,18 @@ test('failed local writes do not pretend to save a study record',()=>{
   assert.equal(vm.runInContext('subjects()[0].records.length',app),0);
   assert.equal(disk.size,0);
 });
+test('fresh app uses the nine requested subjects in screenshot column order',()=>{
+  const app=openStoredApp(new Map());
+  assert.equal(vm.runInContext('subjects().map(s=>s.name).join(",")',app),'英语作文,专业课背诵,专业课计算,肖1000,800题,逻辑,写作,英语真题,数学强化');
+});
+test('empty untouched old defaults migrate while personalized subjects and history remain intact',()=>{
+  const oldNames=['专业课','高等数学','英语阅读','思想政治','线性代数','概率统计','英语单词','英语写作','专业练习'];
+  const subjects=oldNames.map((name,i)=>({id:`subject-${i}`,name,records:[]}));
+  const disk=new Map();
+  const save=()=>disk.set('magic-study:v1',JSON.stringify({version:1,started:true,subjects}));
+  save();assert.equal(vm.runInContext('subjects()[0].name',openStoredApp(disk)),'英语作文');
+  subjects[0].records=['2026-10-01'];save();
+  assert.equal(vm.runInContext('subjects()[0].name',openStoredApp(disk)),'专业课');
+  subjects[0].records=[];subjects[0].name='自定义专业课';save();
+  assert.equal(vm.runInContext('subjects()[0].name',openStoredApp(disk)),'自定义专业课');
+});
