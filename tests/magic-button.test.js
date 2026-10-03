@@ -103,3 +103,38 @@ test('long press opens history without recording and dragging cancels the hold',
   assert.equal(open,1);assert.equal(recorded,0);
   handlers.pointerdown(event);handlers.pointerup(event);button.onclick(event);assert.equal(recorded,1);
 });
+
+function openStoredApp(disk,failWrites=false){
+  const sandbox=vm.createContext({Date,Math,document:{getElementById:()=>({open:false})},localStorage:{getItem:key=>disk.get(key)||null,setItem:(key,value)=>{if(failWrites)throw new Error('Storage unavailable');disk.set(key,value);}}});
+  vm.runInContext(core,sandbox);
+  vm.runInContext(script.slice(script.indexOf('const $='),script.indexOf('function color(')),sandbox);
+  vm.runInContext('render=()=>{};renderHistory=()=>{};animatePress=()=>{};notify=()=>{};',sandbox);
+  vm.runInContext(script.slice(script.indexOf('function setStudy('),script.indexOf('function bindSubject(')),sandbox);
+  return sandbox;
+}
+test('first-use subject edits and study records survive reopening without a start action',()=>{
+  const disk=new Map();let app=openStoredApp(disk);
+  assert.equal(vm.runInContext('subjects().every(s=>s.records.length===0)',app),true);
+  assert.equal(vm.runInContext("updateSubjects(subjects().map((s,i)=>i===0?{...s,name:'我的英语'}:s))",app),true);
+  assert.equal(vm.runInContext("record(subjects()[0].id)",app),true);
+  app=openStoredApp(disk);
+  assert.equal(vm.runInContext('subjects()[0].name',app),'我的英语');
+  assert.equal(vm.runInContext('subjects()[0].records.includes(dayKey())',app),true);
+  assert.equal(vm.runInContext('subjects().length',app),9);
+});
+test('existing records retain names and dates regardless of the old started flag',()=>{
+  for(const started of [true,false]){
+    const disk=new Map([['magic-study:v1',JSON.stringify({version:1,started,subjects:[{id:'mine',name:'我的数学',records:['2026-10-01']}]})]]);
+    const app=openStoredApp(disk);
+    assert.equal(vm.runInContext('subjects()[0].name',app),'我的数学');
+    assert.equal(vm.runInContext('subjects()[0].records[0]',app),'2026-10-01');
+    vm.runInContext("updateSubjects([...subjects(),{id:'new',name:'英语',records:[]}])",app);
+    assert.equal(vm.runInContext('subjects().length',openStoredApp(disk)),2);
+  }
+});
+test('failed local writes do not pretend to save a study record',()=>{
+  const disk=new Map(),app=openStoredApp(disk,true);
+  assert.equal(vm.runInContext('record(subjects()[0].id)',app),false);
+  assert.equal(vm.runInContext('subjects()[0].records.length',app),0);
+  assert.equal(disk.size,0);
+});
